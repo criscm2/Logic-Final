@@ -1,7 +1,119 @@
 \documentclass{article}
 
-\usepackage{amsmath,amssymb}
+\usepackage{amsmath,amssymb,amsthm}
+
+\newtheorem{thm}{Theorem}
+\newtheorem{lem}{Lemma}
 
 \begin{document}
-Hello, World!
+\begin{lem}
+There is no proof of $A \rightarrow A$ in the \L ukasiewicz system that is less than 5 steps long.
+\end{lem}
+\begin{proof}
+In order to prove that no such proof exists we will attempt to construct such a proof.
+We will despite our best efforts fail to do so demonstrating the impossibility of the task.
+
+We will start our proof at the end.
+We know that the statement $A \rightarrow A$ must appear in the proof,
+and that any steps after it are extraneous and can be removed.
+Thus $A \rightarrow A$ must be the last step of the proof.
+
+\begin{align*}
+A \rightarrow A \\
+\end{align*}
+
+We also know that $A \rightarrow A$ does not fit the form of any of our axioms.
+This means that we must have arrived at it from modus ponens.
+
+\begin{align*}
+A \rightarrow A \tag*{Modus Ponens}\\
+\end{align*}
+
+Since we arrived at this from modus ponens we know that there must be earlier statements of the form $\phi$ and $\phi \rightarrow (A \rightarrow A)$.
+Since all statements are finite we also know that there is no $\phi$ such that
+
+\begin{align*}
+\phi = \phi \rightarrow (A \rightarrow A)
+\end{align*}
+
+Thus the two statements must be separate.
+
+\begin{gather*}
+\phi \\
+\phi \rightarrow (A \rightarrow A) \\
+A \rightarrow A \tag*{Modus Ponens}\\
+\end{gather*}
+
+We can express $\phi \rightarrow (A \rightarrow A)$ as a statement of L.S.1 if $\phi = A$,
+however doing so would mean that our proof would need to include a proof of $A$.
+Since $A$ clearly is independent of our axioms we know that the statement cannot be a reference to L.S.1.
+
+If we try to write the same statement as L.S.2 we will find it impossible.
+
+\begin{gather*}
+\phi \rightarrow (A \rightarrow A) = (\psi \rightarrow (\chi \rightarrow \omega)) \rightarrow ((\psi \rightarrow \chi) \rightarrow (\psi \rightarrow \omega)) \\
+\phi = (\psi \rightarrow (\chi \rightarrow \omega)), A \rightarrow A = (\psi \rightarrow \chi) \rightarrow (\psi \rightarrow \omega) \\
+\phi = (\psi \rightarrow (\chi \rightarrow \omega)), A = \psi \rightarrow \chi, A = \psi \rightarrow \omega \\
+\end{gather*}
+
+Since $A$ cannot be of the form $\psi \rightarrow \chi$ (nor the form $\psi \rightarrow \omega$) there is no instantiation of L.S.2 of the form $\phi \rightarrow (A \rightarrow A)$.
+
+If we set $\phi$ equal to $\neg A \rightarrow \neg A$ we will find that L.S.3 allows us to conclude our statement.
+
+\begin{gather*}
+\neg A \rightarrow \neg A \\
+(\neg A \rightarrow \neg A) \rightarrow (A \rightarrow A) \tag*{L.S.3} \\
+A \rightarrow A \tag*{Modus Ponens}\\
+\end{gather*}
+
+Now using the same thought process as $A \rightarrow A$ we can show that $\neg A \rightarrow \neg A$ must be derived via modus ponens.
+This gives us a proof of the form:
+
+\begin{gather*}
+\psi \\
+\psi \rightarrow (\neg A \rightarrow \neg A) \\
+(\neg A \rightarrow \neg A) \rightarrow (A \rightarrow A) \tag*{L.S.3} \\
+\neg A \rightarrow \neg A \tag*{Modus Ponens}\\
+A \rightarrow A \tag*{Modus Ponens}\\
+\end{gather*}
+
+Now since we are looking for a proof with 4 steps we know that it must be the case that $\psi$ is equal to $(\neg A \rightarrow \neg A) \rightarrow (A \rightarrow A)$, otherwise we would have 5 steps.
+
+\begin{gather*}
+((\neg A \rightarrow \neg A) \rightarrow (A \rightarrow A)) \rightarrow (\neg A \rightarrow \neg A) \\
+(\neg A \rightarrow \neg A) \rightarrow (A \rightarrow A) \tag*{L.S.3} \\
+\neg A \rightarrow \neg A \tag*{Modus Ponens}\\
+A \rightarrow A \tag*{Modus Ponens}\\
+\end{gather*}
+
+Now we need to check whether the first statement can be a instantiation of one of our axioms.
+If we check we find that there are no values of $\phi$, $\psi$ and $\chi$ for which the our statement is an instantiation of any of the axioms.
+
+Now we backtrace to the last descision we made.
+We chose to represent $\phi \rightarrow (A \rightarrow A)$ as L.S.3.
+Since that arrived us at an incorrect conclusion we know that it cannot be the case that in a four step proof that step is introduced by L.S.3.
+Since we have removed all of the axioms as possibilites to introduce $\phi \rightarrow (A \rightarrow A)$  we know that it is introduced by modus ponens.
+
+\begin{gather*}
+\phi \\
+\psi \\
+\psi \rightarrow (\phi \rightarrow (A \rightarrow A)) \\
+\phi \rightarrow (A \rightarrow A) \tag*{MP} \\
+A \rightarrow A \tag*{Modus Ponens}\\
+\end{gather*}
+
+Since we have 5 claims here we know that in order to reduce our proof to 4 steps we must have two of them that are equal.
+It is clear that no statement containing $\phi$ can be equal to $\phi$ and the same goes for $\psi$.
+We also know that if a statement $\chi$ that relies on a statement $\omega$, it must be the case that $\chi \neq \omega$ otherwise our proof would be circular.
+
+Of the remaining statments that could be equal there is only one pair that has the same form.
+This leaves us to say that $\phi = \psi$. 
+
+\begin{gather*}
+\phi \\
+\phi \rightarrow (\phi \rightarrow (A \rightarrow A)) \\
+\phi \rightarrow (A \rightarrow A) \tag*{MP} \\
+A \rightarrow A \tag*{Modus Ponens}\\
+\end{gather*}
+\end{proof}
 \end{document}
