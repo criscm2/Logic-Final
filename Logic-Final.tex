@@ -1,6 +1,7 @@
 \documentclass{article}
 
 \usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
 
 \newtheorem{thm}{Theorem}
 \newtheorem{lem}{Lemma}
@@ -17,16 +18,17 @@ We will start our proof at the end.
 We know that the statement $A \rightarrow A$ must appear in the proof,
 and that any steps after it are extraneous and can be removed.
 Thus $A \rightarrow A$ must be the last step of the proof.
+We will label this step $\alpha$
 
 \begin{align*}
-A \rightarrow A \\
+A \rightarrow A \tag*{($\alpha$)}\\
 \end{align*}
 
 We also know that $A \rightarrow A$ does not fit the form of any of our axioms.
 This means that we must have arrived at it from modus ponens.
 
 \begin{align*}
-A \rightarrow A \tag*{Modus Ponens}\\
+A \rightarrow A \tag*{Modus Ponens ($\alpha$)}\\
 \end{align*}
 
 Since we arrived at this from modus ponens we know that there must be earlier statements of the form $\phi$ and $\phi \rightarrow (A \rightarrow A)$.
@@ -39,9 +41,9 @@ Since all statements are finite we also know that there is no $\phi$ such that
 Thus the two statements must be separate.
 
 \begin{gather*}
-\phi \\
-\phi \rightarrow (A \rightarrow A) \\
-A \rightarrow A \tag*{Modus Ponens}\\
+\phi \tag{$\gamma$}\\
+\phi \rightarrow (A \rightarrow A) \tag{$\beta$}\\
+A \rightarrow A \tag*{Modus Ponens ($\alpha$)}\\
 \end{gather*}
 
 We can express $\phi \rightarrow (A \rightarrow A)$ as a statement of L.S.1 if $\phi = A$,
@@ -61,20 +63,20 @@ Since $A$ cannot be of the form $\psi \rightarrow \chi$ (nor the form $\psi \rig
 If we set $\phi$ equal to $\neg A \rightarrow \neg A$ we will find that L.S.3 allows us to conclude our statement.
 
 \begin{gather*}
-\neg A \rightarrow \neg A \\
-(\neg A \rightarrow \neg A) \rightarrow (A \rightarrow A) \tag*{L.S.3} \\
-A \rightarrow A \tag*{Modus Ponens}\\
+\neg A \rightarrow \neg A \tag{$\gamma$}\\
+(\neg A \rightarrow \neg A) \rightarrow (A \rightarrow A) \tag*{L.S.3 ($\beta$)} \\
+A \rightarrow A \tag*{Modus Ponens ($\alpha$)}\\
 \end{gather*}
 
 Now using the same thought process as $A \rightarrow A$ we can show that $\neg A \rightarrow \neg A$ must be derived via modus ponens.
 This gives us a proof of the form:
 
 \begin{gather*}
-\psi \\
-\psi \rightarrow (\neg A \rightarrow \neg A) \\
-(\neg A \rightarrow \neg A) \rightarrow (A \rightarrow A) \tag*{L.S.3} \\
-\neg A \rightarrow \neg A \tag*{Modus Ponens}\\
-A \rightarrow A \tag*{Modus Ponens}\\
+\psi \tag{$\eta$}\\
+\psi \rightarrow (\neg A \rightarrow \neg A) \tag{$\delta$} \\
+(\neg A \rightarrow \neg A) \rightarrow (A \rightarrow A) \tag*{L.S.3 ($\beta$)} \\
+\neg A \rightarrow \neg A \tag*{Modus Ponens ($\gamma$)}\\
+A \rightarrow A \tag*{Modus Ponens ($\alpha$)}\\
 \end{gather*}
 
 Now since we are looking for a proof with 4 steps we know that it must be the case that $\psi$ is equal to $(\neg A \rightarrow \neg A) \rightarrow (A \rightarrow A)$, otherwise we would have 5 steps.
@@ -98,7 +100,7 @@ Since we have removed all of the axioms as possibilites to introduce $\phi \righ
 \phi \\
 \psi \\
 \psi \rightarrow (\phi \rightarrow (A \rightarrow A)) \\
-\phi \rightarrow (A \rightarrow A) \tag*{MP} \\
+\phi \rightarrow (A \rightarrow A) \tag*{Modus Ponenes} \\
 A \rightarrow A \tag*{Modus Ponens}\\
 \end{gather*}
 
@@ -112,8 +114,24 @@ This leaves us to say that $\phi = \psi$.
 \begin{gather*}
 \phi \\
 \phi \rightarrow (\phi \rightarrow (A \rightarrow A)) \\
-\phi \rightarrow (A \rightarrow A) \tag*{MP} \\
+\phi \rightarrow (A \rightarrow A) \tag*{Modus Ponenes} \\
 A \rightarrow A \tag*{Modus Ponens}\\
 \end{gather*}
+
+Our remaining statements must be instantiations of our axioms because any use of modus ponens would add new steps to the proof.
+If we start with the sentence $\phi \rightarrow (\phi \rightarrow (A \rightarrow A))$ we will find it can only be instantiated by L.S.1.
+
+\begin{gather*}
+A \rightarrow A \\
+(A \rightarrow A) \rightarrow ((A \rightarrow A) \rightarrow (A \rightarrow A)) \tag*{L.S.1} \\
+(A \rightarrow A) \rightarrow (A \rightarrow A) \tag*{Modus Ponenes} \\
+A \rightarrow A \tag*{Modus Ponens}\\
+\end{gather*}
+
+Now in order to make this proof valid we must proof $A \rightarrow A$ in 1 step.
+This would require the instantiation of an axiom and we already know that this is impossible.
+
+Thus there is no proof of $A \rightarrow A$ that is 4 steps or shorter.
+
 \end{proof}
 \end{document}
