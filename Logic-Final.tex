@@ -263,6 +263,53 @@ Now in order to make this proof valid we must proof $A \rightarrow A$ in 1 step.
 This would require the instantiation of an axiom and we already know that this is impossible.
 
 Thus there is no proof of $A \rightarrow A$ that is 4 steps or shorter.
+\end{proof}
+
+\begin{lem}
+	Given $\neg A$, there is no proof of $A \rightarrow B$ that is shorter than 4 steps.
+\end{lem}
+\begin{proof}
+	In order to prove that no such proof exists, we will again attempt to construct such a proof.
+	We will again start the proof at the end and work backwards toward our premise. Given that $A \rightarrow B$ must appear in the proof, any steps prior to that superfluous and will be disregarded. Thus $A \rightarrow B$ must be the last step. We'll call this step $\alpha$:
+	
+	\begin{gather*}
+	A \rightarrow B \tag*{$(\alpha)$} \\
+	\end{gather*}
+	
+	For my own sake, I went ahead and proved this in as few lines as I could using Fitch, which has the benefit of being robust. In such a system, the proof is 5 lines (including the premise) and includes a simple subproof:
+	
+	\begin{gather*}
+	\neg A \tag*{Premise (1)} \\
+	A \tag*{Assumed (2)} \\
+	\bot \tag*{$\bot$ Introduction 1,2 (3)} \\
+	B \tag*{$\bot$ Elimination 3 (4)} \\
+	A \rightarrow B \tag*{$\rightarrow$ Introduction 2-4 (5)} \\
+	\end{gather*}
+	
+	Ergo, whatever we achieve via our axioms may well model this process. Using this thinking as a baseline, we will proceed.
+	
+	\begin{gather*}
+	\neg A \tag*{Premise ($\phi$)} \\
+	\neg A \rightarrow (\neg B \rightarrow \neg A) \tag*{L.S.1 $\phi$ ($\delta$)} \\
+	\neg B \rightarrow \neg A \tag*{MP $\phi, \delta$ ($\gamma$)} \\
+	(\neg B \rightarrow \neg A) \rightarrow (A \rightarrow B) \tag*{L.S.3 $\gamma$ ($\beta$)} \\
+	A \rightarrow B \tag*{MP $\gamma, \beta$ ($\alpha$)} \\
+	\end{gather*}
+	
+	This follows logic identical to Lemma 1, arriving at an identical conclusion within 4 steps.
+\end{proof}
+
+\begin{lem}
+	Given $A \rightarrow B$ and $A \rightarrow C$, we can conclude that $A \rightarrow (B \land C)$ in only [] steps.
+\end{lem}
+\begin{proof}
+	Starting with our conclusion as our final statement:
+
+	\begin{gather*}
+	A \rightarrow (B \land C) \tag*{$(\alpha)$} \\
+	\end{gather*}
+	
+	
 
 \end{proof}
 \end{document}
