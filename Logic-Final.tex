@@ -207,7 +207,24 @@ So we will only consider the case where $\Phi \cap \Omega \equiv \Pi$ and $\Psi 
 
 Now if we return to our definitions
 \begin{align*}
-(\Phi \rightarrow \Psi) \cap (\Omega \rightarrow \Sigma) = \left\{x\mid\exists f:(\Phi \rightarrow \Psi)\lhd f = x \land (\Omega \rightarrow \Sigma) \lhd f = x\right\}
+(\Phi \rightarrow \Psi) \cap (\Omega \rightarrow \Sigma) &= \left\{x\mid\exists f:(\Phi \rightarrow \Psi)\lhd f = x \land (\Omega \rightarrow \Sigma) \lhd f = x\right\} \\
+&= \left\{x\mid\exists f:\left(
+\begin{matrix}
+\Phi \lhd (f \mid \Phi^\ast) \rightarrow \Psi \lhd (f \mid \Psi^\ast) = x & \land\\
+\Omega \lhd (f \mid \Omega^\ast) \rightarrow \Sigma \lhd (f \mid \Sigma^\ast) = x & 
+\end{matrix}\right)\right\}
+\end{align*}
+
+From here we know that all of our $x$ must be of the form $\Pi \rightarrow \lambda$ thus we can restate this as:
+\begin{align*}
+(\Phi \rightarrow \Psi) \cap (\Omega \rightarrow \Sigma) &= \left\{x\mid\exists f:(\Phi \rightarrow \Psi)\lhd f = x \land (\Omega \rightarrow \Sigma) \lhd f = x\right\} \\
+&= \left\{(x \rightarrow y)\mid\exists f:\left(
+\begin{matrix}
+\Phi \lhd (f \mid \Phi^\ast) = x & \land \\
+\Sigma \lhd (f \mid \Sigma^\ast) = x & \land \\
+\Psi \lhd (f \mid \Psi^\ast) = y & \land \\
+\Omega \lhd (f \mid \Omega^\ast) = y &
+\end{matrix}\right)\right\}
 \end{align*}
 \end{proof}
 
