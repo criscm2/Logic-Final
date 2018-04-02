@@ -56,7 +56,7 @@ The \textbf{assignment} of a formula by some function $f$, that maps free variab
 One can think of assignment as applying a function $f$ to every free variable in the formula.
 In this way it ``\textit{assigns}" each free variable.
 
-We will now talk about formula with the language of sets.
+We will now talk about formulae with the language of sets.
 This will become useful as we go on.
 
 \begin{defin}
@@ -68,6 +68,22 @@ We will use the usual $\in$ symbol to denote membership.
 A \in B \iff \exists f: B \lhd f = A
 \end{align*}
 \end{defin}
+
+\begin{lem}
+If $x \in B$ there is exactly one $f$ such that $B \lhd f = x$.
+In other words if $B \lhd f = x$ and $B \lhd g = x$ then $f = g$.
+\end{lem}
+\begin{proof}
+We will prove this via structural induction.
+
+For atoms we know that this is the case because atoms don't contain free varaibles and thus the only assignment function is $f : \{\} \mapsto \{\}$.
+Since there is only one assignment function it is trivial that there can only be one assignment function.
+
+If we have that $\Phi \in \Psi$ where $\Psi$ is a free variable we know that the only assignment function $f$ such that $\Psi \lhd f = \Phi$ is $f : \{\Phi\} \mapsto \{\Psi\}$.
+The domain must be $\{\Psi\}$ because $\Psi$ is the only free variable and it must map to $\Phi$.
+
+Now let us consider that $\neg \Phi \in \neg \Psi$ where we know that there is only one function such that $\Psi \lhd f = \Phi$.
+\end{proof}
 
 \begin{defin}
 Let the \textbf{intersection} (denoted $\cap$) of two formulae $A$ and $B$ be the set of all well formed formula such that there is an assignment that makes the well formed formula equal to both $A$ and $B$.
@@ -132,10 +148,13 @@ We consider
 \begin{align*}
 (\Phi \rightarrow \Psi) \cap (\Omega \rightarrow \Sigma)
 \end{align*}
-Now if either $\Phi \cap \Omega = \{\}$ or $\Psi \cap \Sigma = 0$ it is clear that the composite statement must be empty.
+Now if either $\Phi \cap \Omega = \{\}$ or $\Psi \cap \Sigma = \{\}$ it is clear that the composite statement must be empty.
 So we will only consider the case where $\Phi \cap \Omega \equiv \Pi$ and $\Psi \cap \Sigma \equiv \Xi$.
 
-
+Now if we return to our definitions
+\begin{align*}
+(\Phi \rightarrow \Psi) \cap (\Omega \rightarrow \Sigma) = \left\{x\mid\exists f:(\Phi \rightarrow \Psi)\lhd f = x \land (\Omega \rightarrow \Sigma) \lhd f = x\right\}
+\end{align*}
 \end{proof}
 
 \begin{thm}
