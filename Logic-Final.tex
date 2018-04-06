@@ -174,7 +174,7 @@ Let the \textbf{intersection} (denoted $\cap$) of two formulae $\Phi$ and $\Psi$
 the set of all well formed formulae $\Omega$ such that there is an assignment that makes $\Omega$ equal to both $\Phi$ and $\Psi$.
 
 \begin{align*}
-\Phi \cap \Psi = \left\{\Omega \in \mathcal{W} \mid \exists f: (A \lhd f = \Omega \land B \lhd f = \Omega)\right\}
+\Phi \cap \Psi = \left\{\Omega \in \mathcal{W} \mid \exists f: (\Phi \lhd f = \Omega \land \Psi \lhd f = \Omega)\right\}
 \end{align*}
 \end{defin}
 
@@ -201,6 +201,53 @@ every well formed subformula of the formula is a member of the set.
 A \equiv \Phi \iff \forall \Omega \in \mathcal{F}: \Omega \in A \iff (\Omega \subseteq \Phi \land \Omega \in \mathcal{W})
 \end{align*}
 \end{defin}
+
+
+\begin{lem}
+If $\Phi \cap \Psi \equiv \Omega$ then $\Omega \subseteq \Phi$.
+\end{lem}
+\begin{proof}
+Let us try a proof by induction.
+
+If $\Omega$ is a well formed formula, that is $\Omega \in \mathcal{W}$, then
+\begin{align*}
+\forall \Sigma : (\Sigma \in \Phi \cap \Psi \iff (\Sigma \subseteq \Omega \land \Sigma \in \mathcal{W}))
+\end{align*}
+Since by definition $\forall f: \forall \Xi \in \mathcal{w} : \Xi \lhd f = \Xi$ we can say:
+\begin{gather*}
+\forall \Sigma : (\Sigma \in \Phi \cap \Psi \iff (\Sigma = \Omega \land \Sigma \in \mathcal{W})) \\
+\Omega \in \Phi \cap \Psi \\
+\end{gather*}
+
+Since $\Omega$ is in the intersection there must exist some function $f$ that maps both $\Phi$ and $\Psi$ to $\Omega$
+\begin{align*}
+\exists f: \Phi \lhd f = \Omega \land \Psi \lhd f = \Omega
+\end{align*}
+Therefor $\Omega$ must be a subformula of $\Phi$ (and $\Psi$).
+
+Now let $\Omega$ be a free variable.
+Since $\Omega$ is a free variable for any formula $\Xi$ there exists an assignment from $\Omega$ to $\Xi$.
+This can be see by constructing the assignment, if we have a function such that $f(\Omega) = \Xi$ then $\Omega \lhd f = \Xi$.
+Therefor every well formed formula must be in $\Phi \cap \Psi$, ($\Phi \cap \Psi = \mathcal{W}$). 
+If $\Phi$ is of the form $\Xi \rightarrow \Lambda$ then any assignment of $\Phi$ must also be of the form $\Delta \rightarrow \Gamma$.
+If $\Phi$ is of the form $\neg\Xi$ then any assignment of $\Phi$ must also be of the form $\neg\Lambda$.
+If $\Phi$ is an atom then any assignment of $\Phi$ must also be an atom.
+Thus in order for $\Phi \cap \Psi$ to contain every well formed formula $\Phi$ must be a free variable.
+Since $\Phi$ is a free variable every formula is a subformula of $\Phi$ thus $\Omega \subseteq \Phi$.
+
+Now let $\neg \Phi \cap \neg \Psi \equiv \neg \Omega$ where $\Omega \subseteq \Phi$.
+Let $f$ be the function sucht that $\Phi \lhd f =\Omega$ (this is guarenteed to exist from the definition of subformula),
+by the definition of assignment $\neg\Phi \lhd = \neg\Omega$.
+
+Now let $(\Phi_1 \rightarrow \Phi_2) \cap (\Psi_1 \rightarrow \Psi_2) \equiv (\Lambda_1 \rightarrow \Lambda_2)$ where $\Lambda_1 \subseteq \Phi_1$ and $\Lambda_2 \subseteq \Phi_2$.
+Via the definition of subformula we know that there must be functions $f$ and $g$ such that $\Phi_1 \lhd g = \Lambda_1$ and $\Phi_2 \lhd f = \Lambda_2$.
+If we unpack the definition of intersection we have that
+\begin{align*}
+\{\Omega \in \mathcal{W} \mid \exists h : ((\Phi_1 \rightarrow \Phi_2) \lhd h = \Omega \land (\Psi_1 \rightarrow \Psi_2) \lhd h = \Omega)\} \equiv (\Lambda_1 \rightarrow \Lambda_2) \\
+\{(\Omega_1 \rightarrow \Omega_2) \in \mathcal{W} \mid \exists h : (\Phi_1 \lhd h = \Omega_1 \land \Phi_2 \lhd h = \Omega_2 \land \Psi_1 \lhd h = \Omega_1 \land \Psi_2 \lhd h = \Omega_2)\} \equiv (\Lambda_1 \rightarrow \Lambda_2) \\
+\end{align*}
+$(\Lambda_1 \rightarrow \Lambda_2) \subseteq (\Phi_1 \rightarrow \Phi_2)$
+\end{proof}
 
 \begin{lem}
 The intersection of two formulae is either the empty set or equivalent to a formula
@@ -237,12 +284,6 @@ We consider
 Now if either $\Phi \cap \Omega = \{\}$ or $\Psi \cap \Sigma = \{\}$ it is clear that the composite statement must be empty.
 So we will only consider the case where $\exists \Pi : \Phi \cap \Omega \equiv \Pi$ and $\exists \Xi : \Psi \cap \Sigma \equiv \Xi$.
 
-Now let us consider an assignment function $f$ such that
-\begin{align*}
-\Phi \cap \Omega \equiv \Phi \lhd (f \mid \Phi)  \\
-\Phi \cap \Omega \equiv \Omega \lhd (f \mid \Omega)  \\
-\end{align*}
-Note that unlike previous assignment functions $f$ may not assign every free variable to a well formed formula.
 \end{proof}
 
 \begin{thm}
