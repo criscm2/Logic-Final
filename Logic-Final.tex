@@ -413,51 +413,39 @@ This would require the instantiation of an axiom and we already know that this i
 Thus there is no proof of $A \rightarrow A$ that is 4 steps or shorter.
 \end{proof}
 
-\begin{lem}
-	Given $\neg A$, there is no proof of $A \rightarrow B$ that is shorter than 4 steps.
-\end{lem}
-\begin{proof}
-	In order to prove that no such proof exists, we will again attempt to construct such a proof.
-	We will again start the proof at the end and work backwards toward our premise. Given that $A \rightarrow B$ must appear in the proof, any steps prior to that superfluous and will be disregarded. Thus $A \rightarrow B$ must be the last step. We'll call this step $\alpha$:
-	
-	\begin{gather*}
-	A \rightarrow B \tag*{$(\alpha)$} \\
-	\end{gather*}
-	
-	For my own sake, I went ahead and proved this in as few lines as I could using Fitch, which has the benefit of being robust. In such a system, the proof is 5 lines (including the premise) and includes a simple subproof:
-	
-	\begin{gather*}
-	\neg A \tag*{Premise (1)} \\
-	A \tag*{Assumed (2)} \\
-	\bot \tag*{$\bot$ Introduction 1,2 (3)} \\
-	B \tag*{$\bot$ Elimination 3 (4)} \\
-	A \rightarrow B \tag*{$\rightarrow$ Introduction 2-4 (5)} \\
-	\end{gather*}
-	
-	Ergo, whatever we achieve via our axioms may well model this process. Using this thinking as a baseline, we will proceed.
-	
-	\begin{gather*}
-	\neg A \tag*{Premise ($\phi$)} \\
-	\neg A \rightarrow (\neg B \rightarrow \neg A) \tag*{L.S.1 $\phi$ ($\delta$)} \\
-	\neg B \rightarrow \neg A \tag*{MP $\phi, \delta$ ($\gamma$)} \\
-	(\neg B \rightarrow \neg A) \rightarrow (A \rightarrow B) \tag*{L.S.3 $\gamma$ ($\beta$)} \\
-	A \rightarrow B \tag*{MP $\gamma, \beta$ ($\alpha$)} \\
-	\end{gather*}
-	
-	This follows logic identical to Lemma 1, arriving at an identical conclusion within 4 steps.
-\end{proof}
+We can note that the methodology for determining the shortest possible proof is to work backwards from the desired conclusion. We can begin to formalize this into a general approach by observing which axioms are utilized in our proof. Note that Modus Ponens was applied to obtain the final statement and L.S.1 was applied to our initial statement to create a second:
 
-\begin{lem}
-	Given $A \rightarrow B$ and $A \rightarrow C$, we can conclude that $A \rightarrow (B \land C)$ in only [] steps.
-\end{lem}
-\begin{proof}
-	Starting with our conclusion as our final statement:
+\begin{gather*}
+	\phi \tag*{Given (X)} \\
+	\phi \rightarrow (\Xi \rightarrow \phi) \tag*{L.P.1 on X (X+1)} \\
+\end{gather*}
 
-	\begin{gather*}
-	A \rightarrow (B \land C) \tag*{$(\alpha)$} \\
-	\end{gather*}
-	
-	
+and 
 
-\end{proof}
+\begin{gather*}
+	\Sigma \rightarrow \psi \tag*{Some axiom (Y-1)} \\
+	\psi \tag*{MP on Y-1 (Y)} \\
+\end{gather*}
+
+where we seek to prove that $\phi \rightarrow \psi$. We can account for $4$ of the necessary $5$ steps we've proven that we need to create a valid argument. The fifth step linking the our two pairs must utilize one of our axioms, meaning that we have three options: \\
+
+L.S.1
+\begin{gather*}
+	(\phi \rightarrow (\Xi \rightarrow \phi)) \rightarrow ((\Sigma \rightarrow \psi) \rightarrow (\phi \rightarrow (\Xi \rightarrow \phi))
+\end{gather*} \\
+
+L.S.2
+\begin{gather*}
+	(\phi \rightarrow (\Xi \rightarrow \phi)) \rightarrow ((\phi \rightarrow \chi) \rightarrow (\phi \rightarrow \phi))
+\end{gather*} \\
+
+L.S.3
+\begin{gather*}
+(\neg\neg \phi \rightarrow \neg\neg(\Sigma \rightarrow \phi)) \rightarrow (\neg(\Sigma \rightarrow \psi) \rightarrow \neg\phi)
+\end{gather*} \\
+
+L.S.3 doesn't directly apply to our given pairs; it was only included due to the technical equivalence of $(\phi \rightarrow (\Sigma \rightarrow \phi)$ to $(\neg \neg \phi \rightarrow \neg\neg(\Sigma \rightarrow \phi))$ (by virtue of the definition of $\neg$). As such, we'll disregard it and only move forward with L.S.1 and L.S.2. \\
+
+
+
 \end{document}
