@@ -213,12 +213,11 @@ If $\Omega$ is a well formed formula, that is $\Omega \in \mathcal{W}$, then
 \begin{align*}
 \forall \Sigma : (\Sigma \in \Phi \cap \Psi \iff (\Sigma \subseteq \Omega \land \Sigma \in \mathcal{W}))
 \end{align*}
-Since by definition $\forall f: \forall \Xi \in \mathcal{w} : \Xi \lhd f = \Xi$ we can say:
+Since by definition $\forall f: \forall \Xi \in \mathcal{W} : \Xi \lhd f = \Xi$ we can say:
 \begin{gather*}
 \forall \Sigma : (\Sigma \in \Phi \cap \Psi \iff (\Sigma = \Omega \land \Sigma \in \mathcal{W})) \\
 \Omega \in \Phi \cap \Psi \\
 \end{gather*}
-
 Since $\Omega$ is in the intersection there must exist some function $f$ that maps both $\Phi$ and $\Psi$ to $\Omega$
 \begin{align*}
 \exists f: \Phi \lhd f = \Omega \land \Psi \lhd f = \Omega
@@ -237,15 +236,30 @@ Since $\Phi$ is a free variable every formula is a subformula of $\Phi$ thus $\O
 
 Now let $\neg \Phi \cap \neg \Psi \equiv \neg \Omega$ where $\Omega \subseteq \Phi$.
 Let $f$ be the function sucht that $\Phi \lhd f =\Omega$ (this is guarenteed to exist from the definition of subformula),
-by the definition of assignment $\neg\Phi \lhd = \neg\Omega$.
+by the definition of assignment $(\neg\Phi) \lhd f = \neg\Omega$.
 
 Now let $(\Phi_1 \rightarrow \Phi_2) \cap (\Psi_1 \rightarrow \Psi_2) \equiv (\Lambda_1 \rightarrow \Lambda_2)$ where $\Lambda_1 \subseteq \Phi_1$ and $\Lambda_2 \subseteq \Phi_2$.
-Via the definition of subformula we know that there must be functions $f$ and $g$ such that $\Phi_1 \lhd g = \Lambda_1$ and $\Phi_2 \lhd f = \Lambda_2$.
+Via the definition of subformula we know that there must be functions $f$ and $g$ such that $\Phi_1 \lhd f = \Lambda_1$ and $\Phi_2 \lhd g = \Lambda_2$.
 If we unpack the definition of intersection we have that
 \begin{align*}
 \{\Omega \in \mathcal{W} \mid \exists h : ((\Phi_1 \rightarrow \Phi_2) \lhd h = \Omega \land (\Psi_1 \rightarrow \Psi_2) \lhd h = \Omega)\} \equiv (\Lambda_1 \rightarrow \Lambda_2) \\
 \{(\Omega_1 \rightarrow \Omega_2) \in \mathcal{W} \mid \exists h : (\Phi_1 \lhd h = \Omega_1 \land \Phi_2 \lhd h = \Omega_2 \land \Psi_1 \lhd h = \Omega_1 \land \Psi_2 \lhd h = \Omega_2)\} \equiv (\Lambda_1 \rightarrow \Lambda_2) \\
+\{\Omega_1 \in \mathcal{W} \mid \exists h : \Phi_1 \lhd h = \Omega_1 \land \Psi_1 \lhd h = \Omega_1 \} \equiv \Lambda_1 \\
+\{\Omega_2 \in \mathcal{W} \mid \exists h : \Phi_2 \lhd h = \Omega_2 \land \Psi_2 \lhd h = \Omega_2 \} \equiv \Lambda_2 \\
+\Phi_1 \cap \Psi_1 \equiv \Lambda_1 \\
+\Phi_2 \cap \Psi_2 \equiv \Lambda_2 \\
 \end{align*}
+
+Let us consider the function $h$ such that
+\begin{align*}
+\forall x \in \Phi_1^* : h(x) = f(x) \\
+\forall x \in \Phi_2^* : h(x) = g(x) \\
+\end{align*}
+This is a well defined function because
+\begin{align*}
+\forall x \in \Phi_1^*\cap\Phi_2^* : f(x) = g(x)
+\end{align*}
+
 $(\Lambda_1 \rightarrow \Lambda_2) \subseteq (\Phi_1 \rightarrow \Phi_2)$
 \end{proof}
 
@@ -279,10 +293,40 @@ Lastly we have $\rightarrow$.
 $\rightarrow$ is trickier.
 We consider
 \begin{align*}
-(\Phi \rightarrow \Psi) \cap (\Omega \rightarrow \Sigma)
+(\Phi_1 \rightarrow \Phi_2) \cap (\Psi_1 \rightarrow \Psi_2)
 \end{align*}
-Now if either $\Phi \cap \Omega = \{\}$ or $\Psi \cap \Sigma = \{\}$ it is clear that the composite statement must be empty.
-So we will only consider the case where $\exists \Pi : \Phi \cap \Omega \equiv \Pi$ and $\exists \Xi : \Psi \cap \Sigma \equiv \Xi$.
+Now if either $\Phi_1 \cap \Psi_1 = \{\}$ or $\Phi_2 \cap \Psi_2 = \{\}$ it is clear that the composite statement must be empty.
+So we will only consider the case where $\exists \Lambda_1 : \Phi_1 \cap \Psi_1 \equiv \Lambda_1$ and $\exists \Lambda_2 : \Phi_2 \cap \Psi_2 \equiv \Lambda_2$.
+By lemma 2 we know that if $\Lambda_1 \subseteq \Phi_1$ and $\Lambda_2 \subseteq \Phi_2$.
+That means
+\begin{align*}
+\exists f : \Phi_1 \lhd f = \Lambda_1
+\end{align*}
+If we consider assigning $\Phi_2$ by $f$ we will get a new formula.
+If we expend the definition of intersection we can show that
+\begin{align*}
+(\Phi_1 \rightarrow \Phi_2) \cap (\Psi_1 \rightarrow \Psi_2) \subseteq (\Phi_1 \cap \Psi_1) \cap (\Psi_1 \cap \Psi_2)
+\end{align*}
+If we consider some well formed formula $\Xi$ that is in the intersection.
+By the definition of intersection
+\begin{align*}
+\exists q: \Lambda_1 \lhd q = \Xi
+\end{align*}
+By lemma 2 this can be rewritten as
+\begin{align*}
+\exists q: (\Phi_1 \lhd f) \lhd q = \Xi \\
+\exists q: \Phi_1 \lhd (f \circ q) = \Xi
+\end{align*}
+Via lemma 1 we can deduce that
+\begin{align*}
+\exists q: \Phi_2 \lhd (f \circ q) = \Xi
+\exists q: (\Phi_2 \lhd f) \lhd q = \Xi \\
+\exists q: \Lambda_2 \lhd q = \Xi \\
+\end{align*}
+Thus $\Lambda_2 \subseteq \Phi_2 \lhd f$.
+
+If $\Lambda_2 \not\subseteq \Phi_2 \lhd f$ then $(\Phi_1 \rightarrow \Phi_2) \cap (\Psi_1 \rightarrow \Psi_2) = \{\}$
+
 
 \end{proof}
 
