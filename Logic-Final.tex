@@ -105,6 +105,62 @@ the \textbf{assignment} of $\Phi$ by $f$, denoted $\Phi \lhd f$, will be defined
 One can think of assignment as applying a function $f$ to every free variable in the formula.
 In this way it ``\textit{assigns}" each free variable.
 
+\begin{defin}
+The \textbf{chain} of two assignment functions, $f$ and $g$, denoted $g \diamond f$ is defined as follows:
+\begin{align*}
+(f \diamond g) (x) = (f (x)) \lhd g
+\end{align*}
+alternatively via partial application we could write this as
+\begin{align*}
+(f \diamond g) = ((\lhd g)\circ f)
+\end{align*}
+\end{defin}
+
+\begin{lem}
+\begin{align*}
+(\Phi \lhd f) \lhd g = \Phi \lhd (f \diamond g)
+\end{align*}
+\end{lem}
+\begin{proof}
+Here we will use a pretty straightforward proof by induction.
+If we assume that $\Phi$ is of the form $(\Phi_1 \rightarrow \Phi_2)$ and
+\begin{gather*}
+(\Phi_1 \lhd f) \lhd g = \Phi_1 \lhd (f \diamond g) \\
+\land \\
+(\Phi_2 \lhd f) \lhd g = \Phi_2 \lhd (f \diamond g)
+\end{gather*}
+We can show
+\begin{align*}
+((\Phi_1 \rightarrow \Phi_2) \lhd f) \lhd g &= (\Phi_1 \lhd f \rightarrow \Phi_2 \lhd f) \lhd g                     \tag{Definition of Assignment}\\
+                                            &= ((\Phi_1 \lhd f) \lhd g \rightarrow (\Phi_2 \lhd f) \lhd g)          \tag{Definition of Assignment}\\
+                                            &= (\Phi_1 \lhd (f \diamond g) \rightarrow (\Phi_2 \lhd f) \lhd g)      \tag{Inductive Hypothesis I}\\
+                                            &= (\Phi_1 \lhd (f \diamond g) \rightarrow \Phi_2 \lhd (f \diamond g))  \tag{Inductive Hypothesis II}\\
+                                            &= (\Phi_1 \rightarrow \Phi_2) \lhd (f \diamond g)                      \tag{Definition of Assignment}\\
+\end{align*}
+If we assume that $\Phi$ is of the form $\neg\Phi$ and $(\Phi \lhd f) \lhd g = \Phi \lhd (f \diamond g)$ we can show
+\begin{align*}
+((\neg \Phi) \lhd f) \lhd g &= (\neg (\Phi \lhd f)) \lhd g     \tag{Definition of Assignment} \\
+                            &= \neg ((\Phi \lhd f) \lhd g)     \tag{Definition of Assignment} \\
+                            &= \neg (\Phi \lhd (f \diamond g)) \tag{Inductive Hypothesis}     \\
+                            &= (\neg \Phi) \lhd (f \diamond g) \tag{Definition of Assignment} \\
+\end{align*}
+If we assume that $\Phi \in \mathbb{A}$ we can show that
+\begin{align*}
+(\Phi \lhd f) \lhd g &= \Phi \lhd g              \tag{Definition of Assignment} \\
+                     &= \Phi                     \tag{Definition of Assignment} \\
+                     &= \Phi \lhd (f \diamond g) \tag{Definition of Assignment} \\
+\end{align*}
+If we assume that $\Phi \in \mathbb{V}$ we can show that
+\begin{align*}
+(\Phi \lhd f) \lhd g &= f(\Phi) \lhd g           \tag{Definition of Assignment} \\
+                     &= (f \diamond g) (\Phi)    \tag{Definition of Assignment} \\
+                     &= \Phi \lhd (f \diamond g) \tag{Definition of Chain} \\
+\end{align*}
+Thus via induction we know that $(\Phi\lhd f)\lhd g=\Phi\lhd(f\diamond g)$.
+\end{proof}
+
+This lemma means we can treat chaining as function composition for assignment.
+
 \begin{lem}
 If $\Phi \lhd f = \Phi \lhd g$ then $f \mid \Phi^\ast = g \mid \Phi^\ast$.
 \end{lem}
@@ -297,36 +353,42 @@ We consider
 \end{align*}
 Now if either $\Phi_1 \cap \Psi_1 = \{\}$ or $\Phi_2 \cap \Psi_2 = \{\}$ it is clear that the composite statement must be empty.
 So we will only consider the case where $\exists \Lambda_1 : \Phi_1 \cap \Psi_1 \equiv \Lambda_1$ and $\exists \Lambda_2 : \Phi_2 \cap \Psi_2 \equiv \Lambda_2$.
-By lemma 2 we know that if $\Lambda_1 \subseteq \Phi_1$ and $\Lambda_2 \subseteq \Phi_2$.
+By lemma 1 we know that if $\Lambda_1 \subseteq \Phi_1$ and $\Lambda_2 \subseteq \Phi_2$.
 That means
 \begin{align*}
-\exists f : \Phi_1 \lhd f = \Lambda_1
+\exists f : \Phi_1 \lhd f_1 = \Lambda_1 \\
+\exists f : \Phi_2 \lhd f_2 = \Lambda_2
 \end{align*}
-If we consider assigning $\Phi_2$ by $f$ we will get a new formula.
-If we expend the definition of intersection we can show that
+Let us assume that the intersection $(\Phi_1 \rightarrow \Phi_2) \cap (\Psi_1 \rightarrow \Psi_2)$ is non-empty (the fact is trivially true if it is empty).
+We will consider some well formed formula $\Xi = (\Xi_1 \rightarrow \Xi_2)$ that is in this intersection.
+If we expand the definition of intersection we can show that
 \begin{align*}
-(\Phi_1 \rightarrow \Phi_2) \cap (\Psi_1 \rightarrow \Psi_2) \subseteq (\Phi_1 \cap \Psi_1) \cap (\Psi_1 \cap \Psi_2)
+(\Phi_1 \rightarrow \Phi_2) \cap (\Psi_1 \rightarrow \Psi_2) = \left\{(\Xi_1\rightarrow\Xi_2)\in\mathcal{W}\mid\exists h:
+      \Phi_1\lhd h=\Xi_1
+\land \Phi_2\lhd h=\Xi_2
+\land \Psi_1\lhd h=\Xi_1
+\land \Psi_2\lhd h=\Xi_2
+\right\}
 \end{align*}
-If we consider some well formed formula $\Xi$ that is in the intersection.
-By the definition of intersection
+We thus know there is an assignment, we will call this $h$ such that
 \begin{align*}
-\exists q: \Lambda_1 \lhd q = \Xi
+      & \Phi_1\lhd h=\Xi_1 \\
+\land & \Phi_2\lhd h=\Xi_2 \\
+\land & \Psi_1\lhd h=\Xi_1 \\
+\land & \Psi_2\lhd h=\Xi_2
 \end{align*}
-By lemma 2 this can be rewritten as
+We can see that $\Xi_1$ must be in $\Phi_1\cap\Psi_1$ we know there must be an assignment from $\Lambda_1$ to $\Xi$
+\begin{gather*}
+\exists g: \Lambda_1 \lhd g = \Xi_1 \\
+\end{gather*}
+Thus we know that there is some $f$ such that $h = (f \diamond g)$.
+It then follows that:
 \begin{align*}
-\exists q: (\Phi_1 \lhd f) \lhd q = \Xi \\
-\exists q: \Phi_1 \lhd (f \circ q) = \Xi
+\Phi_2 \lhd (f\diamond g) = \Xi_2 \\
+(\Phi_2 \lhd f) \lhd g = \Xi_2 \\
+\Lambda_2 \lhd g = \Xi_2 \\
 \end{align*}
-Via lemma 1 we can deduce that
-\begin{align*}
-\exists q: \Phi_2 \lhd (f \circ q) = \Xi
-\exists q: (\Phi_2 \lhd f) \lhd q = \Xi \\
-\exists q: \Lambda_2 \lhd q = \Xi \\
-\end{align*}
-Thus $\Lambda_2 \subseteq \Phi_2 \lhd f$.
-
-If $\Lambda_2 \not\subseteq \Phi_2 \lhd f$ then $(\Phi_1 \rightarrow \Phi_2) \cap (\Psi_1 \rightarrow \Psi_2) = \{\}$
-
+Thus $\Lambda_2 \subseteq \Lambda_1$.
 
 \end{proof}
 
