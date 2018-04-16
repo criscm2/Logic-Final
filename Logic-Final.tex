@@ -6,6 +6,7 @@
 \newtheorem{thm}{Theorem}
 \newtheorem{lem}{Lemma}
 \newtheorem{defin}{Definition}
+\newtheorem*{cor}{Corollary}
 
 \begin{document}
 
@@ -318,6 +319,42 @@ This is a well defined function because
 
 $(\Lambda_1 \rightarrow \Lambda_2) \subseteq (\Phi_1 \rightarrow \Phi_2)$
 \end{proof}
+\begin{cor}
+If $\Phi \cap \Psi \equiv \Omega$ then $\exists f: \Phi \lhd f = \Omega \land \Psi \lhd f = \Omega$
+\end{cor}
+\begin{proof}
+Let $g$ be a bijection from the free variables to the atoms.
+We know by the definition of equivalence that $\Omega \lhd g \in \Phi \cap \Psi$.
+Now let us consider functions $f_1$ and $f_2$ defined as follows:
+\begin{align*}
+\Phi \lhd f_1 = \Omega \\
+\Psi \lhd f_2 = \Omega
+\end{align*}
+We know that such functions must exist from the lemma.
+From here it follows that
+\begin{align*}
+\Phi \lhd (f_1 \diamond g) = \Omega \lhd g \\
+\Psi \lhd (f_2 \diamond g) = \Omega \lhd g
+\end{align*}
+We also know that there must be a function $h$ such that
+\begin{align*}
+\Phi \lhd h = \Omega \lhd g \\
+\Psi \lhd h = \Omega \lhd g
+\end{align*}
+Via lemma 1 it follows that
+\begin{align*}
+(f_1 \diamond g) \mid \Phi^* = h \mid \Phi^* \\
+(f_2 \diamond g) \mid \Psi^* = h \mid \Psi^*
+\end{align*}
+From here we see that
+\begin{align*}
+(f_1 \diamond g) \mid (\Phi^* \cap \Psi^*) = (f_2 \diamond g) \mid (\Phi^* \cap \Psi^*)
+\end{align*}
+Since $g$ was defined to be an invertible function we know that it is the case that
+\begin{align*}
+f_1 \mid (\Phi^* \cap \Psi^*) = f_2 \mid (\Phi^* \cap \Psi^*)
+\end{align*}
+\end{proof}
 
 \begin{lem}
 The intersection of two formulae is either the empty set or equivalent to a formula
@@ -353,12 +390,6 @@ We consider
 \end{align*}
 Now if either $\Phi_1 \cap \Psi_1 = \{\}$ or $\Phi_2 \cap \Psi_2 = \{\}$ it is clear that the composite statement must be empty.
 So we will only consider the case where $\exists \Lambda_1 : \Phi_1 \cap \Psi_1 \equiv \Lambda_1$ and $\exists \Lambda_2 : \Phi_2 \cap \Psi_2 \equiv \Lambda_2$.
-By lemma 1 we know that if $\Lambda_1 \subseteq \Phi_1$ and $\Lambda_2 \subseteq \Phi_2$.
-That means
-\begin{align*}
-\exists f : \Phi_1 \lhd f_1 = \Lambda_1 \\
-\exists f : \Phi_2 \lhd f_2 = \Lambda_2
-\end{align*}
 Let us assume that the intersection $(\Phi_1 \rightarrow \Phi_2) \cap (\Psi_1 \rightarrow \Psi_2)$ is non-empty (the fact is trivially true if it is empty).
 We will consider some well formed formula $\Xi = (\Xi_1 \rightarrow \Xi_2)$ that is in this intersection.
 If we expand the definition of intersection we can show that
@@ -377,18 +408,11 @@ We thus know there is an assignment, we will call this $h$ such that
 \land & \Psi_1\lhd h=\Xi_1 \\
 \land & \Psi_2\lhd h=\Xi_2
 \end{align*}
-We can see that $\Xi_1$ must be in $\Phi_1\cap\Psi_1$ we know there must be an assignment from $\Lambda_1$ to $\Xi$
-\begin{gather*}
-\exists g: \Lambda_1 \lhd g = \Xi_1 \\
-\end{gather*}
-Thus we know that there is some $f$ such that $h = (f \diamond g)$.
-It then follows that:
+Our goal is to show that there are functions $f$ and $g$ such that $f \diamond g = h$ and
 \begin{align*}
-\Phi_2 \lhd (f\diamond g) = \Xi_2 \\
-(\Phi_2 \lhd f) \lhd g = \Xi_2 \\
-\Lambda_2 \lhd g = \Xi_2 \\
+\Phi_1 \lhd f = \Phi_2 \lhd f \\
+\Psi_1 \lhd f = \Psi_2 \lhd f \\
 \end{align*}
-Thus $\Lambda_2 \subseteq \Lambda_1$.
 
 \end{proof}
 
