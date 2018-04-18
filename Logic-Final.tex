@@ -2,6 +2,9 @@
 
 \usepackage{amsmath,amssymb,amsthm,mathtools,mathrsfs}
 \usepackage[margin=1in]{geometry}
+\usepackage{tikz}
+
+\usetikzlibrary{arrows,automata}
 
 \newtheorem{thm}{Theorem}
 \newtheorem{lem}{Lemma}
@@ -35,12 +38,6 @@ A \textbf{well formed formula} (in the \L ukasievicz system) will be defined as 
 \item No other statements are well formed formulae.
 \end{enumerate}
 We will call the set of all well formed formulae $\mathcal{W}$.
-
-\begin{align*}
-\Phi \in \mathbb{A} &\implies \Phi \in \mathcal{W} \\
-\Phi \in \mathcal{W} &\iff \neg\Phi \in \mathcal{W} \\
-\Phi \in \mathcal{W}\land \Psi \in \mathcal{W} &\iff (\Phi \rightarrow \Psi) \in \mathcal{W} \\
-\end{align*}
 \end{defin}
 
 
@@ -276,8 +273,12 @@ If $\Phi \cap \Psi \equiv \Omega$ then $\exists f: \Phi \lhd f = \Omega \land \P
 \end{lem}
 \begin{proof}
 Let us have $\Phi$ and $\Psi$ such that $\Phi \cap \Psi \equiv \Omega$.
-Now let us consider a function $f$ that is a bijection between the set of free variables $\mathbb{V}$ and the set of atoms that do not appear in $\Omega$, $\mathbb{A}\setminus\Omega^{\mathbb{A}}$.
-If we apply this function $f$ to $\Omega$ we will get a member of the intersection, we will call this $\Xi$.
+Now let us consider a function $f$ that is a bijection between the set of free variables and the set of atoms that do not appear in $\Omega$.
+\begin{equation*}
+f : \mathbb{V} \mapsto \mathbb{A}\setminus\Omega^{\mathbb{A}}
+\end{equation*}
+Let us call the application of $f$ on $\Omega$, $\Xi$.
+Via the definiton of equivalence, $\Xi$ must be a member of the intersecton.
 Now since $\Xi$ is a member of the intersection, by definition, there is some $h$ such that
 \begin{align*}
 \Phi \lhd h = \Xi \land \Psi \lhd h = \Xi
@@ -286,16 +287,112 @@ Now let us consider a function $g$, from formulae to formulae, defined as follow
 \begin{gather*}
 g (\neg\Phi) = \neg (g \Phi) \\
 g (\Phi_1 \rightarrow \Phi_2) = (g(\Phi_1)\rightarrow g(\Phi_2)) \\
-\Phi \in \mathbb{A} \implies g(\Phi) = f^{-1} (\Phi)\\
+\Phi \in \Omega^{\mathbb{V}} \implies g(\Phi) = \Phi\\
+\Phi \in \mathbb{A}\setminus \Omega^{\mathbb{V}} \implies g(\Phi) = f^{-1} (\Phi)\\
 \end{gather*}
-This function replaces all atoms with the free variables that map to them under $f$.
-Now the function $h\circ g$ will assign $\Phi$ to $\Omega$.
+This function replaces all atoms not in $\Omega$ with the free variables that map to them under $f$.
+We will now show that $g (\Xi) = g (\Omega \lhd f) = \Omega$.
+If we consider that $\Omega$ is of the form $\neg \Omega_0$ we see that:
+\begin{align*}
+   g ((\neg \Omega_0) \lhd f)
+&= g (\neg (\Omega_0 \lhd f)) \tag{Definition of Assignment}\\
+&= \neg(g (\Omega_0 \lhd f))  \tag{Definition of $g$}       
+\end{align*}
+If $\Omega$ is of the form $(\Omega_1 \rightarrow \Omega_2)$ we see that:
+\begin{align*}
+   g ((\Omega_1 \rightarrow \Omega_2) \lhd f)
+&= g ((\Omega_1 \lhd f) \rightarrow (\Omega_2 \lhd f))      \tag{Definition of Assignment} \\
+&=((g (\Omega_1 \lhd f)) \rightarrow (g (\Omega_2 \lhd f))) \tag{Definition of $g$}
+\end{align*}
+If $\Omega$ is an atom, it must be the case that $\Omega^\mathbb{A} =\{\Omega\}$, thus
+\begin{align*}
+   g (\Omega \lhd f)
+&= g (\Omega) \tag{Definition of Assignment} \\
+&= \Omega     \tag{Definition of $g$}
+\end{align*}
+If $\Omega$ is a free variable then $f (\Omega)$ must be an atom not in $\Omega^\mathbb{A}$.
+Thus
+\begin{align*}
+   g (\Omega \lhd f)
+&= g (f (\Omega)) \tag{Definition of Assignment} \\
+&= f^{-1} (f (\Omega)) \tag{Definition of $g$} \\
+&= \Omega
+\end{align*}
+Thus by structural induction $g(\Xi) = \Omega$.
+
+Now by this fact we will show the function $g \circ h$ assigns $\Phi$ to $\Omega$.
 \begin{equation*}
-\Phi \lhd (h\circ g) = \Omega
+\Phi \lhd (g \circ h) = \Omega
 \end{equation*}
-This is clear because $h$ will map to $\Xi$ and every atom in $\Xi$ will become the free variable that mapped to it from $\Omega$.
-The same holds for $\Psi$.
+In order to do this we wish to prove that
+\begin{equation*}
+\Phi \lhd (g \circ h) = g (\Phi \lhd h)
+\end{equation*}
+First we will show that $\Phi^\mathbb{V} \subseteq \Omega^\mathbb{V}$.
+Let us assume that there is some atom in $\Phi^\mathbb{A}$ that is not in $\Omega^\mathbb{A}$, we will call this atom $A$.
+We will define a function $j : \mathbb{V} \mapsto \mathbb{A} \setminus \{A\}$.
+$A$ must not be in $(\Omega \lhd j)^\mathbb{A}$, and $\Omega \lhd j$ must be a well formed formula.
+However, $\Omega \lhd j$ must be an assignment of $\Phi$, and every assignment of $\Phi$ must contain $A$, thus $\Omega \lhd j$ must contain $A$.
+This is a contradiction thus our premise was false.
+There is no atom that appears in $\Phi$ that does not appear in $\Omega$.
+
+We will now prove the remainer by induction.
+
+If $\Phi$ is of the form $(\Phi_1 \rightarrow \Phi_2)$ then
+\begin{align*}
+   \Phi \lhd (g \circ h)
+&= (\Phi_1 \rightarrow \Phi_2) \lhd (g \circ h)                 \\
+&= (\Phi_1 \lhd (g \circ h) \rightarrow \Phi_2 \lhd (g \circ h)) \tag{Definition of Assignment} \\
+&= (g(\Phi_1 \lhd h) \rightarrow \Phi_2 \lhd (g \circ h))       \tag{Inductive Hypothesis I} \\
+&= (g (\Phi_1 \lhd h) \rightarrow g(\Phi_2 \lhd h))            \tag{Inductive Hypothesis II} \\
+&= g((\Phi_1 \lhd h) \rightarrow (\Phi_2 \lhd h))              \tag{Definition of $g$} \\
+&= g((\Phi_1 \rightarrow \Phi_2) \lhd h)                       \tag{Definition of Assignment} \\
+&= g(\Phi \lhd h)
+\end{align*}
+If $\Phi$ is of the form $\neg \Phi_0$ then
+\begin{align*}
+\Phi \lhd (g \circ h)
+&= (\neg \Phi_0) \lhd (g \circ h) \\
+&= \neg (\Phi_0 \lhd (g \circ h)) \tag{Definition of Assignment} \\
+&= \neg (g(\Phi_0 \lhd h))       \tag{Inductive Hypothesis} \\
+&= g(\neg (\Phi_0 \lhd h))       \tag{Definition of $g$} \\
+&= g((\neg \Phi_0) \lhd h)       \tag{Definition of Assignment} \\
+&= g(\Phi \lhd h)
+\end{align*}
+If $\Phi$ is an atom, then $\Phi$ must be in $\Omega^\mathbb{A}$, because $\Phi^\mathbb{A}\subseteq \Omega^\mathbb{A}$.
+Thus
+\begin{align*}
+   \Phi \lhd (g \circ h)
+&= \Phi \tag{Definition of Assignment} \\
+&= \Phi \lhd h \tag{Definition of Assignment} \\
+&= g(\Phi\lhd h) \tag{Definition of $g$}
+\end{align*}
+If $\Phi$ is a free variable then
+\begin{align*}
+   \Phi \lhd (g \circ h)
+&= (g \circ h)(\Phi) \tag{Definition of Assignment} \\
+&= g(h(\Phi)) \\
+&= g(\Phi\lhd h) \tag{Definition of Assignment}
+\end{align*}
+This completes our proof by induction, and tells us that $g\circ h$ is the function we sought to prove the existence of.
 \end{proof}
+
+The following diagram illustrates the structure of the above proof.
+Each formula is a node, which are connected by a arrow representing function assignment.
+
+\begin{center}
+\begin{tikzpicture}[->,node distance=3cm]
+\node[state] (Xi)                                        {$\Xi$}   ;
+\node[state] (Omega) [above of=Xi]                       {$\Omega$};
+\node[state] (Phi)   [above left of=Omega,  xshift=-5mm] {$\Phi$}  ;
+\node[state] (Psi)   [above right of=Omega, xshift=5mm]  {$\Psi$}  ;
+\path (Phi)   edge node [left]        {$h$}         (Xi)
+              edge node [above right] {$h \circ g$} (Omega)
+      (Psi)   edge node [right]       {$h$}         (Xi)
+              edge node [above left]  {$h \circ g$} (Omega)
+      (Omega) edge node [right]       {$f$}         (Xi);
+\end{tikzpicture}
+\end{center}
 
 \begin{lem}
 The intersection of two formulae is either the empty set or equivalent to a formula
