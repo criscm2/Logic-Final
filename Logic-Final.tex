@@ -394,6 +394,18 @@ Each formula is a node, which are connected by a arrow representing function ass
 \end{tikzpicture}
 \end{center}
 
+\begin{defin}
+\textbf{The arrow number} of a formula $\Phi$, denoted $\Phi^\rightarrow$, will be defined as follows:
+\begin{align*}
+(\Phi_1\rightarrow\Phi_2)^\rightarrow &= 1 + \Phi_1^\rightarrow + \Phi_2^\rightarrow \\
+(\neg\Phi_0)^\rightarrow &= \Phi_0^\rightarrow \\
+\Phi \in \mathbb{V} \implies \Phi^\rightarrow &= 0\\
+\Phi \in \mathbb{A} \implies \Phi^\rightarrow &= 0
+\end{align*}
+\end{defin}
+
+This can also be thought of as the number of arrows appearing in the string that represents our formula.
+
 \begin{lem}
 The intersection of two formulae is either the empty set or equivalent to a formula
 \begin{align*}
@@ -428,29 +440,68 @@ We consider
 \end{align*}
 Now if either $\Phi_1 \cap \Psi_1 = \{\}$ or $\Phi_2 \cap \Psi_2 = \{\}$ it is clear that the composite statement must be empty.
 So we will only consider the case where $\exists \Lambda_1 : \Phi_1 \cap \Psi_1 \equiv \Lambda_1$ and $\exists \Lambda_2 : \Phi_2 \cap \Psi_2 \equiv \Lambda_2$.
-Let us assume that the intersection $(\Phi_1 \rightarrow \Phi_2) \cap (\Psi_1 \rightarrow \Psi_2)$ is non-empty (the fact is trivially true if it is empty).
-We will consider some well formed formula $\Xi = (\Xi_1 \rightarrow \Xi_2)$ that is in this intersection.
-If we expand the definition of intersection we can show that
+
+Since $\Phi_1\cap \Psi_1 \equiv \Lambda_1$ we know, by lemma 3, that there is an assignment function $f$ that assigns both $\Phi_1$ and $\Psi_1$ to $\Lambda_1$.
+Let us consider an arbitrary member of the intersection of $(\Phi_1\rightarrow\Phi_2)$ and $(\Psi_1\rightarrow\Psi_2)$, let us call it $(\Xi_1\rightarrow\Xi_2)$.
+If we call the function that assigns both $(\Phi_1\rightarrow\Phi_2)$ and $(\Psi_1\rightarrow\Psi_2)$ to $(\Xi_1\rightarrow\Xi_2)$, $h$.
+$h$ must assign $\Phi_1$ and $\Psi_1$ to the same well formed formula (namely $\Xi_1$),
+thus by the definitions of equivalent formulae it must be the case that there is a function $g$ that assigns $\Lambda_1$ to $\Phi_1\lhd h$ and $\Psi_1\lhd h$.
+Thus
 \begin{align*}
-(\Phi_1 \rightarrow \Phi_2) \cap (\Psi_1 \rightarrow \Psi_2) = \left\{(\Xi_1\rightarrow\Xi_2)\in\mathcal{W}\mid\exists h:
-      \Phi_1\lhd h=\Xi_1
-\land \Phi_2\lhd h=\Xi_2
-\land \Psi_1\lhd h=\Xi_1
-\land \Psi_2\lhd h=\Xi_2
-\right\}
+\Phi \lhd (f\diamond g) = \Phi \lhd h \\
+\Psi \lhd (f\diamond g) = \Psi \lhd h
 \end{align*}
-We thus know there is an assignment, we will call this $h$ such that
+From Lemma 1 we then show that
 \begin{align*}
-      & \Phi_1\lhd h=\Xi_1 \\
-\land & \Phi_2\lhd h=\Xi_2 \\
-\land & \Psi_1\lhd h=\Xi_1 \\
-\land & \Psi_2\lhd h=\Xi_2
+(f\diamond g) \mid \Phi^\mathbb{V} \cup \Psi^\mathbb{V} = h \mid \Phi^\mathbb{V} \cup \Psi^\mathbb{V} 
 \end{align*}
-Our goal is to show that there are functions $f$ and $g$ such that $f \diamond g = h$ and
+Now it is trivially true that if $\mathrm{id}$ is the function that maps every free variable to itself.
 \begin{align*}
-\Phi_1 \lhd f = \Phi_2 \lhd f \\
-\Psi_1 \lhd f = \Psi_2 \lhd f \\
+(\mathrm{id}\diamond h) = h
 \end{align*}
+So if we define two new functions $f'$ and $g'$ such that
+\begin{align*}
+f' (x) = \begin{cases}
+f (x) & x \in \Phi^\mathbb{V} \cup \Psi^\mathbb{V} \\ 
+x & \mathrm{otherwise}
+\end{cases}\\
+g'(x) = \begin{cases}
+g (x) & x \in \Phi^\mathbb{V} \cup \Psi^\mathbb{V} \\ 
+h (x) & \mathrm{otherwise}
+\end{cases}
+\end{align*}
+It then must be the case that
+\begin{align*}
+(f'\diamond g') = h
+\end{align*}
+This means that for any formula $\Xi$ in the intersection, that
+\begin{align*}
+((\Phi_1\rightarrow\Phi_2)\lhd f')\lhd g' = \Xi
+((\Psi_1\rightarrow\Psi_2)\lhd f')\lhd g' = \Xi
+\end{align*}
+And since $f'$ is not dependent on $\Xi$ we can say that
+\begin{align*}
+(\Phi_1\rightarrow\Phi_2)\cap(\Psi_1\rightarrow\Psi_2)
+&= ((\Phi_1\rightarrow\Phi_2)\lhd f')\cap((\Psi_1\rightarrow\Psi_2)\lhd f') \\
+&= (\Lambda_1\rightarrow(\Phi_2\lhd f'))\cap(\Lambda_1\rightarrow(\Psi_2\lhd f'))
+\end{align*}
+Since $\Lambda_1$ is already equal to itself, any assignment of $\Lambda_1$ will be equal to itself.
+Thus an assignment will assign both $(\Phi_2\lhd f')$ and $(\Psi_2\lhd f')$ to the same formula if and only if it assigns both $(\Lambda_1\rightarrow(\Phi_2\lhd f'))$ and $(\Lambda_1\rightarrow(\Psi_2\lhd f'))$ to the same formula.
+\begin{equation*}
+(\Phi_2\lhd f')\lhd k =(\Psi_2\lhd f')\lhd k \iff
+(\Lambda_1\rightarrow(\Phi_2\lhd f')) \lhd k = (\Lambda_1\rightarrow(\Psi_2\lhd f')) \lhd k
+\end{equation*}
+From this fact it is clear that $(\Phi_2\lhd f')\cap(\Psi_2\lhd f')$ is empty if and only if $(\Lambda_1\rightarrow(\Phi_2\lhd f'))\cap(\Lambda_1\rightarrow(\Psi_2\lhd f'))$ is also empty.
+If $(\Phi_2\lhd f')\cap(\Psi_2\lhd f')$ is non-empty we see that
+\begin{align*}
+(\Phi_2\lhd f') \lhd k = (\Psi_2\lhd f') \lhd k
+&\iff ((\Lambda_1\lhd k)\rightarrow ((\Phi_2\lhd f')\lhd k)) = ((\Lambda_1\lhd k)\rightarrow ((\Psi_2\lhd f')\lhd k)) \\
+&\iff (\Lambda_1\rightarrow (\Phi_2\lhd f'))\lhd k = (\Lambda_1\rightarrow (\Psi_2\lhd f'))\lhd k
+\end{align*}
+Thus from here if $(\Phi_2\lhd f')\cap(\Psi_2\lhd f') \equiv \Omega$ then by lemma 3 there must be an assignment $k$ from both $(\Phi_2\lhd f')$ and $(\Psi_2\lhd f')$ to $\Omega$, 
+which entails that every assignment into the intersection must be of the form $(k \diamond l)$.
+From the above result this means that every assignment from $(\Lambda_1\rightarrow (\Phi_2\lhd f'))$ and $(\Lambda_1\rightarrow (\Psi_2\lhd f'))$ into their intersection must also be of the form $(k \diamond l)$.
+If we take $(\Lambda_1\rightarrow (\Psi_2\lhd f'))\lhd k$, it must be a formula and it must be equivalent to the intersection.
 
 \end{proof}
 
