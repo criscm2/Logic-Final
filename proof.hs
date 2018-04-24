@@ -1,6 +1,7 @@
 import Intersection
 import Formula
 import Assignment
+import Control.Arrow
 
 axioms = [
 		(If 
@@ -45,30 +46,39 @@ axioms = [
 		)
 	]
 
+data Justification = Axiom Int | MP
+
+instance Show Justification where
+ show (Axiom x) = "(Axiom " ++ show x ++ ")" 
+ show MP = "(Modus Ponens)" 
+
+{- TODO label modus ponens -}
 
 data ProblemState = ProblemState {
-		justifiedFormulae   :: [Formula],
+		justifiedFormulae   :: [(Formula, Justification)],
 		unjustifiedFormulae :: [Formula],
 		unusedName :: Integer
-	} deriving Show
+	}
+
+proofLineJ :: (Formula, Justification) -> String
+proofLineJ (form, just) = '\n': show just ++ ' ' : show form
+
+instance Show ProblemState where
+ show (ProblemState jForms uForms _) = ((reverse uForms) >>= (('\n':).show)) ++ (jForms >>= proofLineJ)
 
 proofSize :: ProblemState -> Int
 proofSize = ((+) . length . justifiedFormulae) <*> (length . unjustifiedFormulae)
 
 universalApply :: Assignment -> ProblemState -> ProblemState
-universalApply assignment (ProblemState jForms uForms uName) = ProblemState (map (apply assignment) jForms) (map (apply assignment) uForms) uName
+universalApply assignment (ProblemState jForms uForms uName) = ProblemState (map (first (apply assignment)) jForms) (map (apply assignment) uForms) uName
 
 modusPonens :: ProblemState -> ProblemState
 modusPonens pState@(ProblemState _ [] _) = pState
-modusPonens (ProblemState jForms (headForm:tailForms) uName) = (ProblemState (headForm:jForms) (tailForms ++ [If (Variable uName) (headForm),Variable uName]) (uName + 1))
+modusPonens (ProblemState jForms (headForm:tailForms) uName) = (ProblemState ((headForm, MP):jForms) (tailForms ++ [If (Variable uName) (headForm),Variable uName]) (uName + 1))
 
 axiomInstantiations :: ProblemState -> [ProblemState]
 axiomInstantiations (ProblemState jForms [] _ ) = []
-axiomInstantiations pState@(ProblemState jForms (headForm:tailForms) uName) = [ universalApply assignment $ ProblemState (headForm:jForms) tailForms uName | Just assignment <- map (`intersection` headForm) axioms ]
-
-
-axiomInstantiationsDebug (ProblemState jForms [] _ ) = []
-axiomInstantiationsDebug pState@(ProblemState jForms (headForm:tailForms) uName) = [ (universalApply assignment $ ProblemState (headForm:jForms) tailForms uName, assignment) | (Just assignment, x) <- zip (map (`intersection` headForm) axioms) [1..] ]
+axiomInstantiations pState@(ProblemState jForms (headForm:tailForms) uName) = [ universalApply assignment $ ProblemState ((headForm, Axiom n):jForms) tailForms uName | (n, Just assignment) <- zip [1..] $ map (`intersection` headForm) axioms ]
 
 justifyFormula :: ProblemState -> [ProblemState]
 justifyFormula (ProblemState jForms [] _) = [] 
