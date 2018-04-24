@@ -6,7 +6,7 @@ import Assignment
 intersection :: Formula -> Formula -> Maybe Assignment
 
 intersection (If a b) (If c d)
- | (Just equivList) <- intersection a c = fmap (equivList ++) $ intersection (apply equivList b) (apply equivList d)
+ | (Just assignment) <- intersection a c = fmap (assignment ++) $ intersection (apply assignment b) (apply assignment d)
  | otherwise = Nothing
 
 intersection (Neg a) (Neg b) = intersection a b

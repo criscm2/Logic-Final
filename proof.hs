@@ -1,64 +1,24 @@
 import Intersection
 import Formula
 import Assignment
+import Lukasiewicz
 import Control.Arrow
 
-axioms = [
-		(If 
-			(Variable (-1))
-			(If
-				(Variable (-2))
-				(Variable (-1))
-			)
-		),
-		(If
-			(If 
-				(Variable (-1))
-				(If 
-					(Variable (-2))
-					(Variable (-3))
-				)
-			)
-			(If
-				(If 
-					(Variable (-1))
-					(Variable (-2))
-				)
-				(If 
-					(Variable (-1))
-					(Variable (-3))
-				)
-			)
-		),
-		(If
-			(If
-				(Neg
-					(Variable (-1))
-				)
-				(Neg
-					(Variable (-2))
-				)
-			)
-			(If
-				(Variable (-2))
-				(Variable (-1))
-			)
-		)
-	]
+type Axiom = ((Integer -> Formula), Int)
 
-data Justification = Axiom Int | MP
+data Justification = Ax Int | MP
 
 instance Show Justification where
- show (Axiom x) = "(Axiom " ++ show x ++ ")" 
+ show (Ax x) = "(Axiom " ++ show x ++ ")" 
  show MP = "(Modus Ponens)" 
 
 {- TODO label modus ponens -}
 
 data ProblemState = ProblemState {
-		justifiedFormulae   :: [(Formula, Justification)],
-		unjustifiedFormulae :: [Formula],
-		unusedName :: Integer
-	}
+  justifiedFormulae   :: [(Formula, Justification)],
+  unjustifiedFormulae :: [Formula],
+  unusedName :: Integer
+ }
 
 proofLineJ :: (Formula, Justification) -> String
 proofLineJ (form, just) = '\n': show just ++ ' ' : show form
@@ -78,7 +38,7 @@ modusPonens (ProblemState jForms (headForm:tailForms) uName) = (ProblemState ((h
 
 axiomInstantiations :: ProblemState -> [ProblemState]
 axiomInstantiations (ProblemState jForms [] _ ) = []
-axiomInstantiations pState@(ProblemState jForms (headForm:tailForms) uName) = [ universalApply assignment $ ProblemState ((headForm, Axiom n):jForms) tailForms uName | (n, Just assignment) <- zip [1..] $ map (`intersection` headForm) axioms ]
+axiomInstantiations (ProblemState jForms (headForm:tailForms) uName) = [ universalApply assignment $ ProblemState ((headForm, Ax n):jForms) tailForms (uName + size) | (n, (Just assignment, size)) <- zip [1..] $ map (first $ (`intersection` headForm).($ uName)) axioms ]
 
 justifyFormula :: ProblemState -> [ProblemState]
 justifyFormula (ProblemState jForms [] _) = [] 

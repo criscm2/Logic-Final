@@ -1,12 +1,15 @@
 module Formula (Formula(..), contains) where
 
+greek :: String
+greek = "αβγδεζηθικλµνξοπρσςτυφψω"
+
 data Formula = If Formula Formula | Neg Formula | Atom Char | Variable Integer deriving Eq
 
 instance Show Formula where
  show (If a b)     = "(" ++ show a ++ " -> " ++ show b ++ ")"
  show (Neg a)      = "-" ++ show a
  show (Atom a)     = a:""
- show (Variable a) = '{' : show a ++ "}"
+ show (Variable a) = greek !! (fromInteger a) : ""
 
 contains :: Formula -> Formula -> Bool
 contains a b | a == b = True

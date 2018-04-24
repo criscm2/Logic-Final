@@ -18,4 +18,4 @@ apply' equiv (Neg a)  = Neg $ apply' equiv a
 apply' _   a@(Atom _) = a
 
 apply :: Assignment -> Formula -> Formula
-apply assignment form = foldr apply' form assignment
+apply assignment form = foldl (flip apply') form assignment
