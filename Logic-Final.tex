@@ -11,6 +11,12 @@
 \newtheorem{defin}{Definition}
 \newtheorem*{cor}{Corollary}
 
+\newenvironment{subproof}{%
+  \begin{proof}[Subproof]%
+}{%
+  \end{proof}%
+}
+
 \begin{document}
 
 First let us lay out some definitions.
@@ -328,7 +334,7 @@ In order to do this we wish to prove that
 \begin{equation*}
 \Phi \lhd (g \circ h) = g (\Phi \lhd h)
 \end{equation*}
-First we will show that $\Phi^\mathbb{V} \subseteq \Omega^\mathbb{V}$.
+First we will show that $\Phi^\mathbb{A} \subseteq \Omega^\mathbb{A}$.
 Let us assume that there is some atom in $\Phi^\mathbb{A}$ that is not in $\Omega^\mathbb{A}$, we will call this atom $A$.
 We will define a function $j : \mathbb{V} \mapsto \mathbb{A} \setminus \{A\}$.
 $A$ must not be in $(\Omega \lhd j)^\mathbb{A}$, and $\Omega \lhd j$ must be a well formed formula.
@@ -432,8 +438,10 @@ but if $\Phi \cap \Psi = \{\}$ then
 \end{align*}
 this means that negation upholds our property.
 
-Lastly we have $\rightarrow$.
-$\rightarrow$ is trickier.
+We now have an inductive proof that our proposition holds for all statements with arrow number $0$.
+
+Now we will consider statements that do not have arrow number $0$.
+We have already shown that statements with a negation at the top level are equivalent to a formula or empty set if removing the negation leaves us with formulae that have such an intersection, so we may go ahead and just consider statements that have an implication at the top level.
 We consider
 \begin{align*}
 (\Phi_1 \rightarrow \Phi_2) \cap (\Psi_1 \rightarrow \Psi_2)
@@ -448,12 +456,12 @@ $h$ must assign $\Phi_1$ and $\Psi_1$ to the same well formed formula (namely $\
 thus by the definitions of equivalent formulae it must be the case that there is a function $g$ that assigns $\Lambda_1$ to $\Phi_1\lhd h$ and $\Psi_1\lhd h$.
 Thus
 \begin{align*}
-\Phi \lhd (f\diamond g) = \Phi \lhd h \\
-\Psi \lhd (f\diamond g) = \Psi \lhd h
+\Phi \lhd (f\diamond g) = \Phi_1 \lhd h \\
+\Psi \lhd (f\diamond g) = \Psi_1 \lhd h
 \end{align*}
 From Lemma 1 we then show that
 \begin{align*}
-(f\diamond g) \mid \Phi^\mathbb{V} \cup \Psi^\mathbb{V} = h \mid \Phi^\mathbb{V} \cup \Psi^\mathbb{V} 
+(f\diamond g) \mid \Phi_1^\mathbb{V} \cup \Psi_1^\mathbb{V} = h \mid \Phi_1^\mathbb{V} \cup \Psi_1^\mathbb{V} 
 \end{align*}
 Now it is trivially true that if $\mathrm{id}$ is the function that maps every free variable to itself.
 \begin{align*}
@@ -462,11 +470,11 @@ Now it is trivially true that if $\mathrm{id}$ is the function that maps every f
 So if we define two new functions $f'$ and $g'$ such that
 \begin{align*}
 f' (x) = \begin{cases}
-f (x) & x \in \Phi^\mathbb{V} \cup \Psi^\mathbb{V} \\ 
+f (x) & x \in \Phi_1^\mathbb{V} \cup \Psi_1^\mathbb{V} \\ 
 x & \mathrm{otherwise}
 \end{cases}\\
 g'(x) = \begin{cases}
-g (x) & x \in \Phi^\mathbb{V} \cup \Psi^\mathbb{V} \\ 
+g (x) & x \in \Phi_1^\mathbb{V} \cup \Psi_1^\mathbb{V} \\ 
 h (x) & \mathrm{otherwise}
 \end{cases}
 \end{align*}
@@ -476,7 +484,7 @@ It then must be the case that
 \end{align*}
 This means that for any formula $\Xi$ in the intersection, that
 \begin{align*}
-((\Phi_1\rightarrow\Phi_2)\lhd f')\lhd g' = \Xi
+((\Phi_1\rightarrow\Phi_2)\lhd f')\lhd g' = \Xi \\
 ((\Psi_1\rightarrow\Psi_2)\lhd f')\lhd g' = \Xi
 \end{align*}
 And since $f'$ is not dependent on $\Xi$ we can say that
@@ -494,6 +502,7 @@ Thus an assignment will assign both $(\Phi_2\lhd f')$ and $(\Psi_2\lhd f')$ to t
 From this fact it is clear that $(\Phi_2\lhd f')\cap(\Psi_2\lhd f')$ is empty if and only if $(\Lambda_1\rightarrow(\Phi_2\lhd f'))\cap(\Lambda_1\rightarrow(\Psi_2\lhd f'))$ is also empty.
 If $(\Phi_2\lhd f')\cap(\Psi_2\lhd f')$ is non-empty we see that
 \begin{align*}
+\forall k :
 (\Phi_2\lhd f') \lhd k = (\Psi_2\lhd f') \lhd k
 &\iff ((\Lambda_1\lhd k)\rightarrow ((\Phi_2\lhd f')\lhd k)) = ((\Lambda_1\lhd k)\rightarrow ((\Psi_2\lhd f')\lhd k)) \\
 &\iff (\Lambda_1\rightarrow (\Phi_2\lhd f'))\lhd k = (\Lambda_1\rightarrow (\Psi_2\lhd f'))\lhd k
@@ -502,6 +511,47 @@ Thus from here if $(\Phi_2\lhd f')\cap(\Psi_2\lhd f') \equiv \Omega$ then by lem
 which entails that every assignment into the intersection must be of the form $(k \diamond l)$.
 From the above result this means that every assignment from $(\Lambda_1\rightarrow (\Phi_2\lhd f'))$ and $(\Lambda_1\rightarrow (\Psi_2\lhd f'))$ into their intersection must also be of the form $(k \diamond l)$.
 If we take $(\Lambda_1\rightarrow (\Psi_2\lhd f'))\lhd k$, it must be a formula and it must be equivalent to the intersection.
+Thus if there is some formula that is equivalent to $(\Phi_2\lhd f')\cap(\Psi_2\lhd f')$ there must also be an formula that is equivalent to $(\Phi_1 \rightarrow \Phi_2) \cap (\Psi_1\rightarrow \Psi_2)$.
+
+Now we will take a moment to prove that $|(\Phi_2\lhd f')^\mathbb{V}\cup(\Psi_2\lhd f')^\mathbb{V}| \leq |(\Phi_1\rightarrow\Phi_2)^\mathbb{V} \cup (\Psi_1\rightarrow\Psi_2)^\mathbb{V}|$.
+\begin{subproof}
+Let us consider a statment $\Delta$ assigned by a function $l$.
+If $\Delta$ is of the form $(\Delta_1\rightarrow\Delta_2)$ then
+\begin{align*}
+((\Delta_1\rightarrow\Delta_2)\lhd l)^\mathbb{V}
+&= ((\Delta_1\lhd l)\rightarrow(\Delta_2\lhd l))^\mathbb{V} \tag{Definition of Assignment} \\
+&= (\Delta_1\lhd l)^\mathbb{V}\cup(\Delta_2\lhd l)^\mathbb{V} \tag{Definition of Free Variable Set}
+\end{align*}
+If $\Delta$ is of the form $\neg \Delta_0$ then
+\begin{align*}
+((\neg \Delta_0)\lhd l)^\mathbb{V}
+&= (\neg (\Delta_0\lhd l))^\mathbb{V} \tag{Definition of Assignment} \\
+&= (\Delta_0\lhd l)^\mathbb{V} \tag{Definition of Free Variable Set} \\
+\end{align*}
+If $\Delta$ is an atom
+\begin{align*}
+(\Delta_0\lhd l)^\mathbb{V}
+&= \Delta_0^\mathbb{V} \tag{Definition of Assignment} \\
+&= \{\} \tag{Definition of Free Variable Set} \\
+\end{align*}
+If $\Delta$ is a free variable
+\begin{align*}
+(\Delta_0\lhd l)^\mathbb{V}
+&= (l(\Delta_0))^\mathbb{V} \tag{Definition of Assignment} \\
+&= \{l(\Delta_0)\} \tag{Definition of Free Variable Set} \\
+\end{align*}
+Thus, by induction it is the case that 
+\begin{align*}
+(\Delta\lhd l)^\mathbb{V}
+= \bigcup_{\delta \in \Delta} (l(\delta))^\mathbb{V}
+\end{align*}
+We can use this to show
+\begin{align*}
+(\Phi_2\lhd f')^\mathbb{V}\cup(\Psi_2\lhd f')^\mathbb{V}
+= \bigcup_{\delta \in \Phi^\mathbb{V}\cup\Psi^\mathbb{V}}(f'(\delta))^\mathbb{V}
+\end{align*}
+
+\end{subproof}
 
 \end{proof}
 
