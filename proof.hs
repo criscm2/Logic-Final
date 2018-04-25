@@ -4,8 +4,6 @@ import Assignment
 import Lukasiewicz
 import Control.Arrow
 
-type Axiom = ((Integer -> Formula), Int)
-
 data Justification = Ax Int | MP | None
 
 instance Show Justification where
@@ -52,11 +50,10 @@ modusPonens (ProblemState jForms (headForm:tailForms) uName) = ProblemState ((ju
   newLiabilities = liabilities headForm ++ [length jForms]
   antecedent     = Statement (Variable uName) None newLiabilities
   implication    = Statement (If (Variable uName) (formula headForm)) None newLiabilities
- 
 
 axiomInstantiations :: ProblemState -> [ProblemState]
 axiomInstantiations (ProblemState jForms [] _ ) = []
-axiomInstantiations (ProblemState jForms (headForm:tailForms) uName) = [ universalApply assignment $ ProblemState (justify (Ax n) headForm:jForms) tailForms (uName + size) | (n, (Just assignment, size)) <- zip [1..] $ map (first $ (`intersection` formula headForm).($ uName)) axioms ]
+axiomInstantiations (ProblemState jForms (headForm:tailForms) uName) = [ universalApply assignment $ ProblemState (justify (Ax n) headForm:jForms) tailForms (uName + size) | (n, (Just assignment, size)) <- zip [1..] $ map (first $ (`intersection` formula headForm) . ($ uName)) axioms ]
 
 justifyFormula :: ProblemState -> [ProblemState]
 justifyFormula (ProblemState jForms [] _) = [] 
@@ -72,16 +69,9 @@ insert pState proofQueue
  | otherwise                                             = take (halfway + 1) proofQueue ++ insert pState (drop (halfway + 1) proofQueue)
  where halfway = (length proofQueue) `div` 2
 
-insert' x [] = [x]
-insert' x queue
- | queue !! halfway > x  = insert' x (take halfway queue) ++ drop halfway queue
- | queue !! halfway == x = take halfway queue ++ (x : drop halfway queue)
- | otherwise             = take (halfway + 1) queue ++ insert' x (drop (halfway + 1) queue)
- where halfway = (length queue) `div` 2
-
 takeStep :: ProofQueue -> ProofQueue
 takeStep [] = []
-takeStep (headState : tailState) = foldr insert tailState $ justifyFormula headState
+takeStep (headState : tailState) = axiomInstantiations headState ++ insert (modusPonens headState) tailState 
 
 findProof :: ProofQueue -> Maybe ProblemState
 findProof [] = Nothing
