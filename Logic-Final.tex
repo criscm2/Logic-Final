@@ -175,6 +175,45 @@ f\mid\Psi^\mathbb{V} = g\mid\Psi^\mathbb{V}     &\land f\mid\Omega^\mathbb{V} = 
 
 \end{proof}
 
+\begin{lem}
+\begin{align*}
+(\Delta\lhd l)^\mathbb{V}
+= \bigcup_{\delta \in \Delta} (l(\delta))^\mathbb{V}
+\end{align*}
+\end{lem}
+\begin{proof}
+Let us consider a statment $\Delta$ assigned by a function $l$.
+If $\Delta$ is of the form $(\Delta_1\rightarrow\Delta_2)$ then
+\begin{align*}
+((\Delta_1\rightarrow\Delta_2)\lhd l)^\mathbb{V}
+&= ((\Delta_1\lhd l)\rightarrow(\Delta_2\lhd l))^\mathbb{V} \tag{Definition of Assignment} \\
+&= (\Delta_1\lhd l)^\mathbb{V}\cup(\Delta_2\lhd l)^\mathbb{V} \tag{Definition of Free Variable Set}
+\end{align*}
+If $\Delta$ is of the form $\neg \Delta_0$ then
+\begin{align*}
+((\neg \Delta_0)\lhd l)^\mathbb{V}
+&= (\neg (\Delta_0\lhd l))^\mathbb{V} \tag{Definition of Assignment} \\
+&= (\Delta_0\lhd l)^\mathbb{V} \tag{Definition of Free Variable Set} \\
+\end{align*}
+If $\Delta$ is an atom
+\begin{align*}
+(\Delta_0\lhd l)^\mathbb{V}
+&= \Delta_0^\mathbb{V} \tag{Definition of Assignment} \\
+&= \{\} \tag{Definition of Free Variable Set} \\
+\end{align*}
+If $\Delta$ is a free variable
+\begin{align*}
+(\Delta_0\lhd l)^\mathbb{V}
+&= (l(\Delta_0))^\mathbb{V} \tag{Definition of Assignment} \\
+&= \{l(\Delta_0)\} \tag{Definition of Free Variable Set} \\
+\end{align*}
+Thus, by induction it is the case that 
+\begin{align*}
+(\Delta\lhd l)^\mathbb{V}
+= \bigcup_{\delta \in \Delta^\mathbb{V}} (l(\delta))^\mathbb{V}
+\end{align*}
+\end{proof}
+
 \begin{defin}
 The \textbf{chain} of two assignment functions, $f$ and $g$, denoted $g \diamond f$ is defined as follows:
 \begin{align*}
@@ -412,12 +451,12 @@ Each formula is a node, which are connected by a arrow representing function ass
 
 This can also be thought of as the number of arrows appearing in the string that represents our formula.
 
-\begin{lem}
+\begin{thm}
 The intersection of two formulae is either the empty set or equivalent to a formula
 \begin{align*}
 \forall \Phi,\Psi \in \mathcal{F} : \left(\Phi \cap \Psi = \left\{\right\} \lor \exists \Omega : \Phi \cap \Psi \equiv \Omega \right)
 \end{align*}
-\end{lem}
+\end{thm}
 \begin{proof}
 This proof will be performed via structural induction.
 To start we verify that this is in fact the case for atoms.
@@ -515,36 +554,6 @@ Thus if there is some formula that is equivalent to $(\Phi_2\lhd f')\cap(\Psi_2\
 
 Now we will take a moment to prove that $|(\Phi_2\lhd f')^\mathbb{V}\cup(\Psi_2\lhd f')^\mathbb{V}| \leq |(\Phi_1\rightarrow\Phi_2)^\mathbb{V} \cup (\Psi_1\rightarrow\Psi_2)^\mathbb{V}|$.
 \begin{subproof}
-Let us consider a statment $\Delta$ assigned by a function $l$.
-If $\Delta$ is of the form $(\Delta_1\rightarrow\Delta_2)$ then
-\begin{align*}
-((\Delta_1\rightarrow\Delta_2)\lhd l)^\mathbb{V}
-&= ((\Delta_1\lhd l)\rightarrow(\Delta_2\lhd l))^\mathbb{V} \tag{Definition of Assignment} \\
-&= (\Delta_1\lhd l)^\mathbb{V}\cup(\Delta_2\lhd l)^\mathbb{V} \tag{Definition of Free Variable Set}
-\end{align*}
-If $\Delta$ is of the form $\neg \Delta_0$ then
-\begin{align*}
-((\neg \Delta_0)\lhd l)^\mathbb{V}
-&= (\neg (\Delta_0\lhd l))^\mathbb{V} \tag{Definition of Assignment} \\
-&= (\Delta_0\lhd l)^\mathbb{V} \tag{Definition of Free Variable Set} \\
-\end{align*}
-If $\Delta$ is an atom
-\begin{align*}
-(\Delta_0\lhd l)^\mathbb{V}
-&= \Delta_0^\mathbb{V} \tag{Definition of Assignment} \\
-&= \{\} \tag{Definition of Free Variable Set} \\
-\end{align*}
-If $\Delta$ is a free variable
-\begin{align*}
-(\Delta_0\lhd l)^\mathbb{V}
-&= (l(\Delta_0))^\mathbb{V} \tag{Definition of Assignment} \\
-&= \{l(\Delta_0)\} \tag{Definition of Free Variable Set} \\
-\end{align*}
-Thus, by induction it is the case that 
-\begin{align*}
-(\Delta\lhd l)^\mathbb{V}
-= \bigcup_{\delta \in \Delta} (l(\delta))^\mathbb{V}
-\end{align*}
 We can use this to show
 \begin{align*}
 (\Phi_2\lhd f')^\mathbb{V}\cup(\Psi_2\lhd f')^\mathbb{V}
