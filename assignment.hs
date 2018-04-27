@@ -2,7 +2,7 @@ module Assignment (Assignment, apply, SubAssignment(..)) where
 
 import Formula
 
-data SubAssignment = SubAssignment Integer Formula
+data SubAssignment = SubAssignment Int Formula
 
 instance Show SubAssignment where
  show (SubAssignment num st) = '{' : show num ++ "} => "++show st

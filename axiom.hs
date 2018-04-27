@@ -1,10 +1,10 @@
-module Axiom (Axiom(), buildAxiom) where
+module Axiom (Axiom(..), buildAxiom) where
 
 import Formula
 import Assignment
 
 data Axiom = Axiom {
- constructor :: (Integer -> Formula),
+ constructor :: (Int -> Formula),
  airity :: Int
 }
 
@@ -19,7 +19,7 @@ combineLists (a:ax) (b:bx)
  | a == b    = a : combineLists ax bx 
  | otherwise = b : combineLists (a:ax) bx 
 
-vSet :: Formula -> [Integer]
+vSet :: Formula -> [Int]
 vSet (Atom _)         = []
 vSet (Neg form)       = vSet form
 vSet (Variable n)     = [n]

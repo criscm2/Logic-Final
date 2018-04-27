@@ -3,7 +3,7 @@ module Formula (Formula(..), contains, vMax) where
 greek :: String
 greek = "αβγδεζηθικλµνξοπρσςτυφψω"
 
-data Formula = If Formula Formula | Neg Formula | Atom Char | Variable Integer deriving Eq
+data Formula = If Formula Formula | Neg Formula | Atom Char | Variable Int deriving Eq
 
 instance Show Formula where
  show (If a b)     = "(" ++ show a ++ " -> " ++ show b ++ ")"
@@ -18,7 +18,7 @@ contains (Neg a) b      = contains a b
 contains (Atom _) b     = False
 contains (Variable _) b = False
 
-vMax :: Formula -> Integer
+vMax :: Formula -> Int
 vMax (Variable a) = a
 vMax (If a b) = max (vMax a) (vMax b)
 vMax (Neg a) = vMax a

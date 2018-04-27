@@ -3,6 +3,8 @@ import Formula
 import Assignment
 import Lukasiewicz
 import Control.Arrow
+import Axiom
+import Data.List
 
 data Justification = Ax Int | MP | None
 
@@ -31,7 +33,7 @@ justify just state = state {justification = just}
 data ProblemState = ProblemState {
   justifiedFormulae   :: [Statement],
   unjustifiedFormulae :: [Statement],
-  unusedName :: Integer
+  unusedName :: Int
  }
 
 instance Show ProblemState where
@@ -43,35 +45,35 @@ proofSize = ((+) . length . justifiedFormulae) <*> (length . unjustifiedFormulae
 universalApply :: Assignment -> ProblemState -> ProblemState
 universalApply assignment (ProblemState jForms uForms uName) = ProblemState ((map $ updateForm $ apply assignment) jForms) ((map $ updateForm $ apply assignment) uForms) uName
 
-modusPonens :: ProblemState -> ProblemState
-modusPonens pState@(ProblemState _ [] _) = pState
-modusPonens (ProblemState jForms (headForm:tailForms) uName) = ProblemState ((justify MP headForm):jForms) (tailForms ++ [implication, antecedent]) (uName + 1)
+modusPonens :: ProblemState -> ProofQueue
+modusPonens pState@(ProblemState _ [] _) = [pState]
+modusPonens (ProblemState jForms (headForm:tailForms) uName) = [ProblemState ((justify MP headForm):jForms) (tailForms ++ [implication, antecedent]) (uName + 1)]
  where
   newLiabilities = liabilities headForm ++ [length jForms]
   antecedent     = Statement (Variable uName) None newLiabilities
   implication    = Statement (If (Variable uName) (formula headForm)) None newLiabilities
+  
+unification :: Statement -> ProblemState -> ProofQueue
+unification (Statement form _ liabilities) (ProblemState jForms uForms uName ) = []
 
 axiomInstantiations :: ProblemState -> [ProblemState]
 axiomInstantiations (ProblemState jForms [] _ ) = []
-axiomInstantiations (ProblemState jForms (headForm:tailForms) uName) = [ universalApply assignment $ ProblemState (justify (Ax n) headForm:jForms) tailForms (uName + size) | (n, (Just assignment, size)) <- zip [1..] $ map (first $ (`intersection` formula headForm) . ($ uName)) axioms ]
-
-justifyFormula :: ProblemState -> [ProblemState]
-justifyFormula (ProblemState jForms [] _) = [] 
-justifyFormula pState = modusPonens pState :  axiomInstantiations pState
+axiomInstantiations (ProblemState jForms (headForm:tailForms) uName) = [ universalApply assignment $ ProblemState (justify (Ax n) headForm:jForms) tailForms (uName + size) | (n, Just assignment, size) <- zip3 [1..] (map ((`intersection` formula headForm) . ($ uName).constructor) axioms) (map airity $ axioms) ]
 
 type ProofQueue = [ProblemState]
-
-insert :: ProblemState -> ProofQueue -> ProofQueue
-insert pState [] = [pState]
-insert pState proofQueue
- | proofSize (proofQueue !! halfway) > proofSize pState  = insert pState (take halfway proofQueue) ++ drop halfway proofQueue
- | proofSize (proofQueue !! halfway) == proofSize pState = take halfway proofQueue ++ (pState : drop halfway proofQueue)
- | otherwise                                             = take (halfway + 1) proofQueue ++ insert pState (drop (halfway + 1) proofQueue)
- where halfway = (length proofQueue) `div` 2
+ 
+merge :: ProofQueue -> ProofQueue -> ProofQueue
+merge [] [] = []
+merge [] proofQueue = proofQueue
+merge proofQueue [] = proofQueue
+merge (headStateA : tailStatesA) (headStateB : tailStatesB)
+ | proofSize (headStateA) < proofSize (headStateB) = headStateA : merge tailStatesA (headStateB : tailStatesB)
+ | proofSize (headStateA) > proofSize (headStateB) = headStateB : merge (headStateA : tailStatesA) tailStatesB
+ | otherwise = headStateA : merge tailStatesA (headStateB : tailStatesB)
 
 takeStep :: ProofQueue -> ProofQueue
 takeStep [] = []
-takeStep (headState : tailState) = axiomInstantiations headState ++ insert (modusPonens headState) tailState 
+takeStep (headState : tailState) = axiomInstantiations headState ++ merge (modusPonens headState) tailState 
 
 findProof :: ProofQueue -> Maybe ProblemState
 findProof [] = Nothing
@@ -80,3 +82,4 @@ findProof pQueue = findProof $ takeStep pQueue
 
 format :: [Formula] -> ProofQueue
 format forms = [ProblemState [] [Statement form None []|form <- forms] $ 1 + maximum (map vMax forms) ]
+main = print(findProof (format [If (Atom 'A') (Atom 'A')]))
