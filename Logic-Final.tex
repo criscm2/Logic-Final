@@ -440,6 +440,39 @@ Each formula is a node, which are connected by a arrow representing function ass
 \end{center}
 
 \begin{defin}
+A formula $\Delta$ is a \textbf{canonical intersection} of two formulae $\Phi$ and $\Psi$, if and only if 
+$\Delta$ is equivalent to $\Phi\cap\Psi$ and every function that assigns $\Phi$ and $\Psi$ to the same formula also assigns $\Delta$ to that formula.
+We will introduce the following notation to express this:
+\begin{align*}
+\dfrac{\Phi \cap \Psi}{\Delta} \iff (\Phi\cap\Psi\equiv\Delta\land(\forall h : (\Phi\lhd h =\Psi\lhd h) \implies \Delta\lhd h=\Phi\lhd h))
+\end{align*}
+\end{defin}
+
+\begin{lem}
+If $\Delta$ is the canonical intersection of $\Phi$ and $\Psi$ then every free variable that appears in $\Delta$ must also appear in $\Phi$ and $\Psi$.
+\begin{align*}
+\dfrac{\Phi\cap\Psi}{\Delta}\implies\Delta^\mathbb{V}\subseteq\Phi^\mathbb{V}\cup\Psi^\mathbb{V}
+\end{align*}
+\end{lem}
+\begin{proof}
+Let us assume the negation.
+Namely that there exists some free variable in $\Delta$ that is not in $\Phi$ or $\Psi$
+\begin{align*}
+\exists x : x \in \Delta^\mathbb{V} \land \neg (x \in \Phi^\mathbb{V}) \land \neg (x \in \Psi^\mathbb{V})
+\end{align*}
+Let us consider some function $h$ such that $\Phi\lhd h=\Psi\lhd h$.
+By the definition of canonical intersection we know that it must be the case that $\Delta\lhd f = \Phi\lhd f$.
+Now it must be the case that $h$ maps $x$ to some value, so we will make a new function $h'$ such that
+for all values other than $x$, $h'$ behaves the same way as $h$, but for $h'(x)$ it maps to anything other than $h(x)$.
+It doesn't matter what as long as it is different from what $h$ maps $x$ to.
+Now it is clear that because $h'$ is the same as $h$ on the domains of $\Phi$ and $\Psi$, that $\Phi\lhd h' = \Phi\lhd h = \Psi\lhd h = \Psi\lhd h'$.
+From our definition we can conclude that $\Delta \lhd h' = \Delta \lhd h$, thus via our first lemma $h' \mid \Delta^\mathbb{V} = h \mid \Delta^\mathbb{V}$.
+However we already know this is false because we asserted that $h'(x) \neq h(x)$.
+From this contradiction we can conclude that no such $x$ can exist.
+
+\end{proof}
+
+\begin{defin}
 \textbf{The arrow number} of a formula $\Phi$, denoted $\Phi^\rightarrow$, will be defined as follows:
 \begin{align*}
 (\Phi_1\rightarrow\Phi_2)^\rightarrow &= 1 + \Phi_1^\rightarrow + \Phi_2^\rightarrow \\
@@ -554,10 +587,15 @@ Thus if there is some formula that is equivalent to $(\Phi_2\lhd f')\cap(\Psi_2\
 
 Now we will take a moment to prove that $|(\Phi_2\lhd f')^\mathbb{V}\cup(\Psi_2\lhd f')^\mathbb{V}| \leq |(\Phi_1\rightarrow\Phi_2)^\mathbb{V} \cup (\Psi_1\rightarrow\Psi_2)^\mathbb{V}|$.
 \begin{subproof}
-We can use this to show
+We can use lemma 3 to show
 \begin{align*}
 (\Phi_2\lhd f')^\mathbb{V}\cup(\Psi_2\lhd f')^\mathbb{V}
-= \bigcup_{\delta \in \Phi^\mathbb{V}\cup\Psi^\mathbb{V}}(f'(\delta))^\mathbb{V}
+= \bigcup_{\delta \in \Phi_2^\mathbb{V}\cup\Psi_2^\mathbb{V}}(f'(\delta))^\mathbb{V}
+\end{align*}
+And by definition we can also say that:
+\begin{align*}
+(\Phi_1\rightarrow\Phi_2)^\mathbb{V} \cup (\Psi_1\rightarrow\Psi_2)^\mathbb{V} =
+\Phi_1^\mathbb{V}\cup\Phi_2^\mathbb{V} \cup \Psi_1^\mathbb{V}\cup\Psi_2^\mathbb{V}
 \end{align*}
 
 \end{subproof}
