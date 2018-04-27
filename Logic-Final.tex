@@ -485,9 +485,9 @@ From this contradiction we can conclude that no such $x$ can exist.
 This can also be thought of as the number of arrows appearing in the string that represents our formula.
 
 \begin{thm}
-The intersection of two formulae is either the empty set or equivalent to a formula
+Either the intersection of two formula is empty or there is a canonical intersection.
 \begin{align*}
-\forall \Phi,\Psi \in \mathcal{F} : \left(\Phi \cap \Psi = \left\{\right\} \lor \exists \Omega : \Phi \cap \Psi \equiv \Omega \right)
+\forall \Phi,\Psi \in \mathcal{F} : \left(\Phi \cap \Psi = \left\{\right\} \lor \exists \Omega : \dfrac{\Phi \cap \Psi}{\Omega} \right)
 \end{align*}
 \end{thm}
 \begin{proof}
@@ -495,10 +495,14 @@ This proof will be performed via structural induction.
 To start we verify that this is in fact the case for atoms.
 $\Phi \cap \Psi$ is the empty set if the atoms are different and is $\Phi$ if the atoms are the same.
 This is pretty clear because no assignment can change a formula consisting only of an atom.
+If $\Phi$ is the intersection it must be canonical because all assignments of $\Phi$ are also $\Phi$.
 
-We can also see that the intersection of two free variables will always be a formula.
-Since every statement is a member of a free variable (simply choose an $f$ such that $f$ results in the statement when applied to the variable in question),
-the result is just another free variable.
+We can also see that for two free variables there is always a canonical intersection.
+All the functions that assign two free variables to the same well formed formula are functions such that $f(\Phi) = f(\Psi)$ thus if we choose
+our canonical intersection to be either $\Phi$ or $\Psi$ we will that this is indeed a intersection and it must be canonical.
+
+Let us now consider that one of our statements is a free variable but the other is not.
+Let's say that 
 
 Next we can see that if $\Phi \cap \Psi \equiv \Omega$
 \begin{align*}
