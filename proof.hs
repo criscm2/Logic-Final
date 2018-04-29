@@ -118,9 +118,9 @@ removeLiabilities count (headLiability:tailLiabilities) (headState:tailStates)
  | headLiability > count  = removeLiabilities (count - 1) tailLiabilities (headState:tailStates) 
  | headLiability < count  = headState : removeLiabilities (count - 1) (headLiability : tailLiabilities) tailStates
 
-axiomInstantiations :: ProblemState -> [ProblemState]
-axiomInstantiations (ProblemState _ [] _ ) = []
-axiomInstantiations (ProblemState jForms (headForm:tailForms) uName) = [ universalApply assignment $ ProblemState (justify (Ax n) headForm:jForms) tailForms (uName + size) | (n, Just assignment, size) <- zip3 [1..] (map ((`intersection` formula headForm) . ($ uName).constructor) axioms) (map airity $ axioms) ]
+axiomInstantiations :: [Axiom] -> ProblemState -> [ProblemState]
+axiomInstantiations axioms (ProblemState _ [] _ ) = []
+axiomInstantiations axioms (ProblemState jForms (headForm:tailForms) uName) = [ universalApply assignment $ ProblemState (justify (Ax n) headForm:jForms) tailForms (uName + size) | (n, Just assignment, size) <- zip3 [1..] (map ((`intersection` formula headForm) . ($ uName).constructor) axioms) (map airity $ axioms) ]
 
 type ProofQueue = [ProblemState]
  
@@ -133,14 +133,22 @@ merge (headA : tailA) (headB : tailB)
  | headA > headB = headB : merge (headA : tailA) tailB
  | otherwise = headA : merge tailA (headB : tailB)
 
-takeStep :: ProofQueue -> ProofQueue
-takeStep [] = []
-takeStep (headState : tailState) = axiomInstantiations headState ++ merge (modusPonens headState) tailState 
+semicircular :: ProblemState -> Bool
+semicircular (ProblemState _ [] _) = False
+semicircular pState @ (ProblemState jForms (headUForm : tailUForms) _) = elem (formula headUForm) $ map formula $ jForms ++ tailUForms 
 
-findProof :: ProofQueue -> Maybe ProblemState
-findProof [] = Nothing
-findProof (p@(ProblemState _ [] _):_) = Just p
-findProof pQueue = findProof $ takeStep pQueue
+takeStep :: [Axiom] -> ProofQueue -> ProofQueue
+takeStep axioms [] = []
+takeStep axioms (headState : tailState)
+ | semicircular headState = tailState
+ | otherwise              = axiomInstantiations axioms headState ++ merge (modusPonens headState) tailState 
+
+findProof :: [Axiom] -> ProofQueue -> Maybe ProblemState
+findProof axioms [] = Nothing
+findProof axioms (p@(ProblemState _ [] _):_) = Just p
+findProof axioms pQueue = findProof axioms $ takeStep axioms pQueue
 
 format :: [Formula] -> ProofQueue
 format forms = [ProblemState [] [Statement form None [] | form <- forms] $ 1 + maximum (map vMax forms) ]
+
+main = print $ findProof axioms $ format [If (Neg $ Neg $ Atom 'A') (Atom 'A')]

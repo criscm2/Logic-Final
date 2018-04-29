@@ -9,7 +9,8 @@ instance Show Formula where
  show (If a b)     = "(" ++ show a ++ " -> " ++ show b ++ ")"
  show (Neg a)      = "-" ++ show a
  show (Atom a)     = a:""
- show (Variable a) = greek !! (fromInteger (toInteger a)) : ""
+ show (Variable a) = '{' : show a ++ "}"
+-- show (Variable a) = greek !! (fromInteger (toInteger a)) : ""
 
 contains :: Formula -> Formula -> Bool
 contains a b | a == b = True
