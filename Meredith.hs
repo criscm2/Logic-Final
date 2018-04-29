@@ -1,8 +1,9 @@
 module Meredith (axioms) where
 
 import Formula
+import Axiom
 
-axioms = zip [
+axioms = zipWith Axiom [
   (\x ->
    (If
     (If

@@ -1,16 +1,18 @@
+module Prover (format, findProof, Justification(..), Statement(..), ProblemState(..)) where
+
 import Intersection
 import Formula
 import Assignment
-import Lukasiewicz
 import Control.Arrow
 import Axiom
 import Data.List
 
-data Justification = Ax Int | MP | None
+data Justification = Ax Int | MP | None | Assume
 
 instance Show Justification where
  show (Ax x) = "(Axiom " ++ show x ++ ")" 
  show MP = "(Modus Ponens)"
+ show Assume = "(Assumption)"
  show None = "????"
 
 data Statement = Statement {
@@ -59,8 +61,8 @@ instance Ord ProblemState where
   | proofSize a > proofSize b = GT
   | otherwise = EQ
 
-proofSize :: ProblemState -> Int
-proofSize = ((+) . length . justifiedFormulae) <*> (length . unjustifiedFormulae)
+proofSize :: ProblemState -> (Int, Int)
+proofSize = ((,) . (((+) . length . unjustifiedFormulae) <*> (length . justifiedFormulae))) <*> (length . unjustifiedFormulae)
 
 addStep :: ProblemState -> Statement -> ProblemState
 addStep (ProblemState jForms uForms uName) statement = ProblemState jForms (statement : uForms) uName
@@ -150,5 +152,3 @@ findProof axioms pQueue = findProof axioms $ takeStep axioms pQueue
 
 format :: [Formula] -> ProofQueue
 format forms = [ProblemState [] [Statement form None [] | form <- forms] $ 1 + maximum (map vMax forms) ]
-
-main = print $ findProof axioms $ format [If (Neg $ Neg $ Atom 'A') (Atom 'A')]
