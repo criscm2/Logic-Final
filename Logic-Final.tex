@@ -614,23 +614,23 @@ In order to prove that no such proof exists we will attempt to construct such a 
 We will despite our best efforts fail to do so demonstrating the impossibility of the task.
 
 We will start our proof at the end.
-We know that the statement $A \rightarrow A$ must appear in the proof,
+We know that the statement $(A \rightarrow A)$ must appear in the proof,
 and that any steps after it are extraneous and can be removed.
-Thus $A \rightarrow A$ must be the last step of the proof.
+Thus $(A \rightarrow A)$ must be the last step of the proof.
 We will label this step $\alpha$
 
 \begin{align*}
-A \rightarrow A \tag*{($\alpha$)}\\
+(A \rightarrow A) \tag*{($\alpha$)}\\
 \end{align*}
 
-We also know that $A \rightarrow A$ does not fit the form of any of our axioms.
+By the above algorithm we know that $(A \rightarrow A)$ does not fit the form of any of our axioms.
 This means that we must have arrived at it from modus ponens.
 
 \begin{align*}
-A \rightarrow A \tag*{Modus Ponens ($\alpha$)}\\
+(A \rightarrow A) \tag*{Modus Ponens ($\alpha$)}\\
 \end{align*}
 
-Since we arrived at this from modus ponens we know that there must be earlier statements of the form $\phi$ and $\phi \rightarrow (A \rightarrow A)$.
+Since we arrived at this from modus ponens we know that there must be earlier statements of the form $\phi$ and $(\phi \rightarrow (A \rightarrow A))$.
 Since all statements are finite we also know that there is no $\phi$ such that
 
 \begin{align*}
@@ -641,66 +641,58 @@ Thus the two statements must be separate.
 
 \begin{gather*}
 \phi \tag{$\gamma$}\\
-\phi \rightarrow (A \rightarrow A) \tag{$\beta$}\\
-A \rightarrow A \tag*{Modus Ponens ($\alpha$)}\\
+(\phi \rightarrow (A \rightarrow A)) \tag{$\beta$}\\
+(A \rightarrow) A \tag*{Modus Ponens ($\gamma$,$\beta$) ($\alpha$)}\\
 \end{gather*}
 
-We can express $\phi \rightarrow (A \rightarrow A)$ as a statement of L.S.1 if $\phi = A$,
+Using our algorithm for intersection we find that we can express $(\phi \rightarrow (A \rightarrow A))$ as a statement of L.S.1 if $\phi = A$,
 however doing so would mean that our proof would need to include a proof of $A$.
 Since $A$ clearly is independent of our axioms we know that the statement cannot be a reference to L.S.1.
 
-If we try to write the same statement as L.S.2 we will find it impossible.
+Via our algorithm we know that $(\phi \rightarrow (A \rightarrow A))$ has an empty intersection with L.S.2 and thus cannot be justified with L.S.2.
+
+Lastly if we set $\phi$ equal to $(\neg A \rightarrow \neg A)$ we will find that L.S.3 allows us to conclude our statement.
 
 \begin{gather*}
-\phi \rightarrow (A \rightarrow A) = (\psi \rightarrow (\chi \rightarrow \omega)) \rightarrow ((\psi \rightarrow \chi) \rightarrow (\psi \rightarrow \omega)) \\
-\phi = (\psi \rightarrow (\chi \rightarrow \omega)), A \rightarrow A = (\psi \rightarrow \chi) \rightarrow (\psi \rightarrow \omega) \\
-\phi = (\psi \rightarrow (\chi \rightarrow \omega)), A = \psi \rightarrow \chi, A = \psi \rightarrow \omega \\
+(\neg A \rightarrow \neg A) \tag{$\gamma$}\\
+((\neg A \rightarrow \neg A) \rightarrow (A \rightarrow A)) \tag*{L.S.3 ($\beta$)} \\
+(A \rightarrow A) \tag*{Modus Ponens ($\gamma$,$\beta$) ($\alpha$)}\\
 \end{gather*}
 
-Since $A$ cannot be of the form $\psi \rightarrow \chi$ (nor the form $\psi \rightarrow \omega$) there is no instantiation of L.S.2 of the form $\phi \rightarrow (A \rightarrow A)$.
-
-If we set $\phi$ equal to $\neg A \rightarrow \neg A$ we will find that L.S.3 allows us to conclude our statement.
-
-\begin{gather*}
-\neg A \rightarrow \neg A \tag{$\gamma$}\\
-(\neg A \rightarrow \neg A) \rightarrow (A \rightarrow A) \tag*{L.S.3 ($\beta$)} \\
-A \rightarrow A \tag*{Modus Ponens ($\alpha$)}\\
-\end{gather*}
-
-Now using the same thought process as $A \rightarrow A$ we can show that $\neg A \rightarrow \neg A$ must be derived via modus ponens.
+Now our intersection algorithm tells us that $(\neg A \rightarrow \neg A)$ must be derived via modus ponens.
 This gives us a proof of the form:
 
 \begin{gather*}
-\psi \tag{$\eta$}\\
-\psi \rightarrow (\neg A \rightarrow \neg A) \tag{$\delta$} \\
-(\neg A \rightarrow \neg A) \rightarrow (A \rightarrow A) \tag*{L.S.3 ($\beta$)} \\
-\neg A \rightarrow \neg A \tag*{Modus Ponens ($\gamma$)}\\
-A \rightarrow A \tag*{Modus Ponens ($\alpha$)}\\
+\psi \tag{$\epsilon$}\\
+(\psi \rightarrow (\neg A \rightarrow \neg A)) \tag{$\delta$} \\
+\phantom{\text{Modus Ponens ($\epsilon$, $\delta$) ($\gamma$)}} (\neg A \rightarrow \neg A) \tag*{Modus Ponens ($\epsilon$, $\delta$) ($\gamma$)}\\
+((\neg A \rightarrow \neg A) \rightarrow (A \rightarrow A)) \tag*{L.S.3 ($\beta$)} \\
+(A \rightarrow A) \tag*{Modus Ponens ($\gamma$,$\beta$) ($\alpha$)}\\
 \end{gather*}
 
 Now since we are looking for a proof with 4 steps we know that it must be the case that $\psi$ is equal to $(\neg A \rightarrow \neg A) \rightarrow (A \rightarrow A)$, otherwise we would have 5 steps.
 
 \begin{gather*}
-((\neg A \rightarrow \neg A) \rightarrow (A \rightarrow A)) \rightarrow (\neg A \rightarrow \neg A) \\
-(\neg A \rightarrow \neg A) \rightarrow (A \rightarrow A) \tag*{L.S.3} \\
-\neg A \rightarrow \neg A \tag*{Modus Ponens}\\
-A \rightarrow A \tag*{Modus Ponens}\\
+(\psi \rightarrow (\neg A \rightarrow \neg A)) \tag{$\delta$} \\
+((\neg A \rightarrow \neg A) \rightarrow (A \rightarrow A)) \tag*{L.S.3 ($\beta$)} \\
+\phantom{\text{Modus Ponens ($\beta$, $\delta$) ($\gamma$)}} (\neg A \rightarrow \neg A) \tag*{Modus Ponens ($\beta$, $\delta$) ($\gamma$)}\\
+(A \rightarrow A) \tag*{Modus Ponens ($\gamma$,$\beta$) ($\alpha$)}
 \end{gather*}
 
-Now we need to check whether the first statement can be a instantiation of one of our axioms.
-If we check we find that there are no values of $\phi$, $\psi$ and $\chi$ for which the our statement is an instantiation of any of the axioms.
+Checking with our algorithm we find that there is no way to instantiate our first statement as one of the axioms.
+Thus it must be modus ponens that introduces it, however it cannot be arrived at via modus ponens from any of the existing formula, meaning we need new steps if we are to continue.
 
 Now we backtrace to the last descision we made.
-We chose to represent $\phi \rightarrow (A \rightarrow A)$ as L.S.3.
+We chose to represent $(\phi \rightarrow (A \rightarrow A))$ as L.S.3.
 Since that arrived us at an incorrect conclusion we know that it cannot be the case that in a four step proof that step is introduced by L.S.3.
-Since we have removed all of the axioms as possibilites to introduce $\phi \rightarrow (A \rightarrow A)$  we know that it is introduced by modus ponens.
+Since we have removed all of the axioms as possibilites to introduce $(\phi \rightarrow (A \rightarrow A))$ we know that it is introduced by modus ponens.
 
 \begin{gather*}
-\phi \\
-\psi \\
-\psi \rightarrow (\phi \rightarrow (A \rightarrow A)) \\
-\phi \rightarrow (A \rightarrow A) \tag*{Modus Ponenes} \\
-A \rightarrow A \tag*{Modus Ponens}\\
+\phi \tag{$\gamma$}\\
+\psi \tag{$\epsilon$}\\
+\psi \rightarrow (\phi \rightarrow (A \rightarrow A)) \tag{$\delta$}\\
+\phantom{\text{Modus Ponens ($\epsilon$, $\delta$) ($\beta$)}} \phi \rightarrow (A \rightarrow A) \tag*{Modus Ponens ($\epsilon$, $\delta$) ($\beta$)} \\
+\phantom{\text{Modus Ponens ($\gamma$, $\beta$) ($\alpha$)}} (A \rightarrow A) \tag*{Modus Ponens ($\gamma$, $\beta$) ($\alpha$)}
 \end{gather*}
 
 Since we have 5 claims here we know that in order to reduce our proof to 4 steps we must have two of them that are equal.
@@ -711,20 +703,20 @@ Of the remaining statments that could be equal there is only one pair that has t
 This leaves us to say that $\phi = \psi$. 
 
 \begin{gather*}
-\phi \\
-\phi \rightarrow (\phi \rightarrow (A \rightarrow A)) \\
-\phi \rightarrow (A \rightarrow A) \tag*{Modus Ponenes} \\
-A \rightarrow A \tag*{Modus Ponens}\\
+\phi \tag{$\gamma$}\\
+\phi \rightarrow (\phi \rightarrow (A \rightarrow A)) \tag{$\delta$}\\
+\phantom{\text{Modus Ponens ($\gamma$, $\delta$) ($\beta$)}} \phi \rightarrow (A \rightarrow A) \tag*{Modus Ponens ($\gamma$, $\delta$) ($\beta$)} \\
+\phantom{\text{Modus Ponens ($\gamma$, $\beta$) ($\alpha$)}} (A \rightarrow A) \tag*{Modus Ponens ($\gamma$, $\beta$) ($\alpha$)}
 \end{gather*}
 
 Our remaining statements must be instantiations of our axioms because any use of modus ponens would add new steps to the proof.
 If we start with the sentence $\phi \rightarrow (\phi \rightarrow (A \rightarrow A))$ we will find it can only be instantiated by L.S.1.
 
 \begin{gather*}
-A \rightarrow A \\
-(A \rightarrow A) \rightarrow ((A \rightarrow A) \rightarrow (A \rightarrow A)) \tag*{L.S.1} \\
-(A \rightarrow A) \rightarrow (A \rightarrow A) \tag*{Modus Ponenes} \\
-A \rightarrow A \tag*{Modus Ponens}\\
+(A\rightarrow A) \tag{$\gamma$}\\
+(A\rightarrow A) \rightarrow ((A\rightarrow A) \rightarrow (A \rightarrow A)) \tag*{L.S.1 ($\delta$)}\\
+\phantom{\text{Modus Ponens ($\gamma$, $\delta$) ($\beta$)}} (A\rightarrow A) \rightarrow (A \rightarrow A) \tag*{Modus Ponens ($\gamma$, $\delta$) ($\beta$)} \\
+\phantom{\text{Modus Ponens ($\gamma$, $\beta$) ($\alpha$)}} (A \rightarrow A) \tag*{Modus Ponens ($\gamma$, $\beta$) ($\alpha$)}
 \end{gather*}
 
 Now in order to make this proof valid we must proof $A \rightarrow A$ in 1 step.
@@ -732,40 +724,4 @@ This would require the instantiation of an axiom and we already know that this i
 
 Thus there is no proof of $A \rightarrow A$ that is 4 steps or shorter.
 \end{proof}
-
-We can note that the methodology for determining the shortest possible proof is to work backwards from the desired conclusion. We can begin to formalize this into a general approach by observing which axioms are utilized in our proof. Note that Modus Ponens was applied to obtain the final statement and L.S.1 was applied to our initial statement to create a second:
-
-\begin{gather*}
-	\phi \tag*{Given (X)} \\
-	\phi \rightarrow (\Xi \rightarrow \phi) \tag*{L.P.1 on X (X+1)} \\
-\end{gather*}
-
-and 
-
-\begin{gather*}
-	\Sigma \rightarrow \psi \tag*{Some axiom (Y-1)} \\
-	\psi \tag*{MP on Y-1 (Y)} \\
-\end{gather*}
-
-where we seek to prove that $\phi \rightarrow \psi$. We can account for $4$ of the necessary $5$ steps we've proven that we need to create a valid argument. The fifth step linking the our two pairs must utilize one of our axioms, meaning that we have three options: \\
-
-L.S.1
-\begin{gather*}
-	(\phi \rightarrow (\Xi \rightarrow \phi)) \rightarrow ((\Sigma \rightarrow \psi) \rightarrow (\phi \rightarrow (\Xi \rightarrow \phi))
-\end{gather*} \\
-
-L.S.2
-\begin{gather*}
-	(\phi \rightarrow (\Xi \rightarrow \phi)) \rightarrow ((\phi \rightarrow \chi) \rightarrow (\phi \rightarrow \phi))
-\end{gather*} \\
-
-L.S.3
-\begin{gather*}
-(\neg\neg \phi \rightarrow \neg\neg(\Sigma \rightarrow \phi)) \rightarrow (\neg(\Sigma \rightarrow \psi) \rightarrow \neg\phi)
-\end{gather*} \\
-
-L.S.3 doesn't directly apply to our given pairs; it was only included due to the technical equivalence of $(\phi \rightarrow (\Sigma \rightarrow \phi)$ to $(\neg \neg \phi \rightarrow \neg\neg(\Sigma \rightarrow \phi))$ (by virtue of the definition of $\neg$). As such, we'll disregard it and only move forward with L.S.1 and L.S.2. \\
-
-
-
 \end{document}
