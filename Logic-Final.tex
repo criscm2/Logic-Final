@@ -17,7 +17,34 @@
   \end{proof}%
 }
 
+\title{Proof Golf in Axiom Systems}
+
+\author{
+Olive, Eamon \\
+\texttt{olivee3@rpi.edu}
+\and
+Crisci, Michael \\
+\texttt{criscm2@rpi.edu}
+}
+
 \begin{document}
+\maketitle
+
+\section{Introduction}
+
+Proof Golf is an activity in which one chooses a logical truth and attempts to construct a proof of minimal ``size".
+There are a two main ways that can be used to measure size.
+The first is to count the number of symbols in the proof, this of course depends not only on the system in which your proof resides but a formal grammar for writing proof.
+Then second is to count the number of steps in the proof, this depends pretty much only on the system in which you are contructing the proof since unlike symbols they tend to not depend on how you write the proof.
+Between these two methods one may also choose to allow or disallow lematta.
+Of course doing so requires us to decide how to score lematta.
+
+For the sake of this paper we will consider the size of a proof to be the number of steps used, disallowing the use of lematta.
+We will do this because it minimizes the number of arbitrary assumptions and in that way becomes more widely applicable similar problems.
+We will also choose to work within the framework of a Hilbert Axiom system, in particular we will concern ourselves with the \L ukasiewicz system however our results are quite general.
+
+
+\section{Basic Definitions and Results}
 
 First let us lay out some definitions.
 These should probably be pretty familiar but we want to be extra explicit.
@@ -605,6 +632,52 @@ And by definition we can also say that:
 \end{subproof}
 
 \end{proof}
+
+As with many inductive theorems we can use this to create a recursive algorithm to find a canonical intersection if such a thing exists.
+We will actually be designing an algorithm to find an \textit{assignment} that assigns our initial statements to a canonical intersection,
+however to get from that to the actual canonical intersection is quite trivial.
+
+Now since this algorithm will eventually be implemented in Haskell, a language with a rigid type system, we need to think about the type of objects involved in this algorithm.
+It is clear that both of our inputs will be formulae, but our output is less clear.
+We wish to output a assignment (which is a function) some of the time and some other value other times to represent the fact that the intersection is empty.
+Now since we can only have one return type for our function we cannot do so naively.
+The solution to this problem is Haskell's \texttt{Maybe} type.
+A \texttt{Maybe} type is used to represent the solution to a problem that might not have a solution.
+A \texttt{Maybe a} can either wrap a value of type \texttt{a} or be \texttt{Nothing}, representing no solution.
+In our case we will output a \texttt{Maybe Assignment} to represent the fact that either we will output an \texttt{Assignment} or, if the intersection is empty, a \texttt{Nothing}.
+Thus the type of our function is:
+\begin{equation*}
+f : \mathcal{F} \mapsto \mathcal{F} \mapsto \texttt{Maybe Assignment}
+\end{equation*}
+
+Now that we have sorted out the type we can actually define our function.
+\begin{equation*}
+f(\Phi,\Psi) = \begin{cases}
+\lambda x . \begin{cases}
+\Psi & x   =  \Phi \\
+x    & x \neq \Phi
+\end{cases} & \Phi \in \mathcal{V}
+\end{cases}
+\end{equation*}
+
+\subsection{Hilbert Systems}
+
+A Hilbert Axiom system is a deductive system with is equipt with a two inference rules, axiom introduction and modus ponens.
+A Hilbert system has a set of Axioms, which are what differentiate different Hilbert systems
+A proof in a Hilbert system is structured as a sequence of well-formed statements, $S$, each justified by the application of a inference rule.
+A statement $\Phi$ can be justified by modus ponens iff there is an assignment $f$ such that $\phi\lhd f$ and $(\phi\rightarrow\psi)\lhd f$ appear earlier in the sequence and
+$\phi\lhd f=\Phi$.
+A statement can be justified via axiom instantiation iff it is an assignment of one of our axioms.
+
+\subsection{\L ukasiewicz Axiom system}
+The \L ukasiewicz Axiom system is a Hilbert system with the following axioms:
+\begin{gather*}
+\phi \rightarrow (\psi \rightarrow \phi) \\
+(\phi\rightarrow(\psi\rightarrow\chi))\rightarrow((\phi\rightarrow\psi)\rightarrow(\phi\rightarrow\chi)) \\
+(\neg\phi\rightarrow\neg\psi)\rightarrow(\psi\rightarrow\phi)
+\end{gather*}
+
+\section{Proof Golf}
 
 \begin{thm}
 There is no proof of $A \rightarrow A$ in the \L ukasiewicz system that is less than 5 steps long.
