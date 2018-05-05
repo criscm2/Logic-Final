@@ -1,4 +1,4 @@
-module Prover (format, findProof, Justification(..), Statement(..), ProblemState(..)) where
+module Prover (format, formatWithAssumptions, findProof, Justification(..), Statement(..), ProblemState(..)) where
 
 import Intersection
 import Formula
@@ -152,3 +152,11 @@ findProof axioms pQueue = findProof axioms $ takeStep axioms pQueue
 
 format :: [Formula] -> ProofQueue
 format forms = [ProblemState [] [Statement form None [] | form <- forms] $ 1 + maximum (map vMax forms) ]
+
+formatWithAssumptions :: [Formula] -> [Formula] -> ProofQueue
+formatWithAssumptions assumptions forms =
+ [ ProblemState
+  [ Statement assumption Assume [] | assumption <- assumptions ]
+  [ Statement form       None   [] | form       <- forms       ]
+  $ 1 + maximum (map vMax $ forms ++ assumptions)
+ ]
